@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head >
+	<meta charset="ISO-8859-1"></meta>
+	<style>
+		#logoutform{
+			float:right;
+			display: inline-block;
+			background-color: white;
+		}
+	</style>
+</head>
+<body>
+	<form th:action="@{/app-logout}" id="logoutform">
+		<input type="submit" value="Logout"></input>
+	</form>
+</body>
+</html>

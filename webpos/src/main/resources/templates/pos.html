@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1"></meta>
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+
+<script src="YourExternalJQueryScripts.js"></script>
+<style>
+body{
+position:relative;
+}
+#billingpanel{
+	width:50%;
+	height:80%;
+	background-color: lime;
+	position:absolute;
+	top: 0;
+}
+#totalpanel{
+	width:50%;
+	height:5%;
+	background-color: aqua;
+	position:absolute;
+	bottom: 15%;
+}
+#belowbuttonspanel{
+	width:50%;
+	height:15%;
+	background-color: gray;
+	position:absolute;
+	bottom: 0;
+}
+#rightpanel{
+	width:15%;
+	height:100%;
+	background-color: olive;
+	position:absolute;
+	right:35%;
+}
+#productspanel{
+	width:35%;
+	height:100%;
+	background-color: navy;
+	position:absolute;
+	right:0;
+}
+</style>
+</head>
+
+<body>
+	<!--  
+	<header data-include="headerportion"></header>
+	<aside data-include="leftsidebar"></aside>
+	<main> This is the pos page
+	<div ng-app="" ng-init="myCol='lightblue'">
+
+</div>
+	</main>
+	
+<input type="button" value="click to toggle fullscreen" onclick="toggleFullScreen(document.documentElement)">
+</input>
+	 <footer data-include="footerportion"></footer> -->
+	 <div id="billingpanel"></div>
+	 <div id="totalpanel">TOTAL</div>
+	 <div id="belowbuttonspanel"></div>
+	 <div id="rightpanel"></div>
+	 <div id="productspanel"></div>
+</body>
+</html>

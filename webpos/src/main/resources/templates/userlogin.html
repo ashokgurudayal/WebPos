@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1"></meta>
+<title>home</title>
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<style>
+	html, body 
+	{margin:0;padding:0;height:100%;}
+	body{
+	background-image: url("pos1.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	}
+	#headerbar{
+		
+		width:100%;
+		height:10%;
+		color: white;
+		text-align: center;
+	}
+	#newuser{
+		color:white;	
+		height: 50%;
+		float:left;	
+		width:33%;
+		box-sizing:border-box;
+		margin-left: 30%;
+		background: rgba(0, 0, 0, 0.4);
+		padding-left: 3%;
+		padding-top: 2%;
+		padding-right: 0;
+		border: 2px thick blue;
+    	border-radius: 5px;
+	}
+	#loginform{
+		color:white;
+		width:30%;
+		box-sizing:border-box;
+		height:30%;
+		margin-left: 65%;
+		background: rgba(0, 0, 0, 0.4);
+		padding-left: 3%;
+		padding-top: 2%;
+		border: 2px thick blue;
+    	border-radius: 5px;
+	}
+	label{
+		width:20%;
+		text-align: left;
+		color: white;
+		display: inline-block;
+	}
+	
+</style>
+</head>
+<body>
+	<div id="headerbar">
+	WEB BASED POS
+	</div>
+	
+	<div id="newuser" >
+	<h2>NEW USER?<br></br>
+	 SIGN UP</h2>
+	 <form action="/adduser" method="post" th:object="${posUser}">
+	 		<label for="firstName">First Name</label>
+	 		<input th:field="*{firstName}" placeholder="Enter the firstname"></input><br></br>
+	 		<label for="lastName">Last Name</label>
+	 		<input th:field="*{lastName}"  placeholder="Enter the lastname"></input><br></br>
+	 		<label for="userName">Username</label>
+	 		<input th:field="*{username}"  placeholder="Enter the Username"></input><br></br>
+	 		<label for="gender">Gender</label>
+			<input th:field="*{gender}" type="radio" value="M">Male</input> <input th:field="*{gender}" type="radio" value="F">Female</input><br></br> 
+	 		<label for="emaildId">Email id</label> 
+			<input th:field="*{emailId}" type="email" placeholder="Enter the emailid"></input><br></br>
+	 		<label for="phoneNo">Phone No</label>
+			<input th:field="*{phoneNo}" type="number"></input>
+	 		<br></br>
+	 		<label for="company">Company</label>
+			<input th:field="*{company}"></input>
+	 		<br></br>
+	 		<label for="password">Password</label>
+	 		<input th:field="*{password}" type="text" placeholder="Enter the password"></input><br></br><br></br>
+	 		
+  			<button style="margin-left:47%" type="submit">SUBMIT</button>
+  			<h1 th:text="${message}"></h1>
+  	</form>
+  	</div>
+	<div id="loginform" >
+  		<H3>LOGIN</H3>
+  		<br></br>
+  		<form th:action="@{/app-login}" method="post">
+  			<label for="username">Username</label>
+  			<input name="app_username" type="text" placeholder="Enter the username"></input><br></br>
+  			
+  			<label for="password">Password</label>
+  			<input type="app_password" placeholder="Enter the password"></input>
+  			<br></br><br></br>
+  			<button style="margin-left:50%" type="submit">SUBMIT</button>
+  		</form>
+  		
+  		Logged out<h3 th:text="${loggedoutusername}"></h3>
+	</div>
+  		
+
+</body>
+</html>

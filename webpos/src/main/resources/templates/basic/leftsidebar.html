@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1"></meta>
+<title>Insert title here</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
+	
+</script>
+
+<script>
+	$(document).ready(function() {
+	
+	//jquery code for additional options on clicking Products
+	$("#leftsidebar ul li").click(function() {
+			$(this).find("ul li").slideToggle(200);
+			// $("#leftsidebar ul li ul li").toggle();
+
+		});
+	});
+
+	//jquery code for highlighting the current page link
+	$('a').each(function() {
+		console.log("window->"+window.location.href);
+		if ($(this).prop('href') == window.location.href) {
+			$(this).addClass('current');
+			$("#leftsidebar ul li ul li").show();
+		}
+	});
+	
+	
+</script>
+</head>
+<body>
+	<nav id="leftsidebar">
+		<a href="home">HOME</a>
+		<ul>
+			<li><a href="sales.html">Sales</a></li>
+			<li><a>Products</a>
+				<ul>
+					<li hidden="true"><a href="addproduct">Add Product</a></li>
+					<li hidden="true"><a href="removeproduct">Remove Product</a></li>
+					<li hidden="true"><a href="adjustinventory">Adjust inventory</a></li>
+					<li hidden="true"><a href="showproducts">Show products</a></li>
+				</ul></li>
+			<li><a href="reports.html">Reports</a></li>
+			<li id="poslink"><a href="pos">POS</a></li>
+		</ul>
+	</nav>
+</body>
+</html>

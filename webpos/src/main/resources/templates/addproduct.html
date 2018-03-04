@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+	<meta charset="ISO-8859-1"></meta>
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" href="style.css"></link>
+
+	<!-- Styles specific to this page are specified as internal style sheet -->
+	<style>
+		
+		#addproductform{
+			width:50%;
+			background-color: white;
+			position:absolute;
+			left:0;
+			top:10%;
+		}
+		#imagediv{
+			background-color:blue;
+			width:100px;
+			height:100px;
+			margin-left: 50%;
+			position: absolute;
+			right:10%;
+			box-sizing: border-box;
+		}
+		label{
+			width:50%;
+			display: inline-block;
+			text-align: left;
+		}
+		
+	</style>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+	<script src="YourExternalJQueryScripts.js"></script>
+	<script>
+	// <![CDATA[
+	function readURL(input) {
+	
+        if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#prodimage')
+                        .attr('src', e.target.result)
+                        .width(150)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+    }
+    // ]]>
+	</script>
+</head>
+<body>
+	<header data-include="headerportion"></header>
+	<aside data-include="leftsidebar"></aside>
+	<main >
+	<!-- This post request would invoke the rest controller -->
+	
+		<h3>ENTER THE PRODUCT INFORMATION AND PRESS SUBMIT</h3><br></br><br></br>
+		
+	<div id="addproductform">
+	<form  action=""  method="post" th:object="${productEntity}">
+			<label th:for="id">Product Id</label> 
+			<input th:field="*{id}"></input><br/>
+			<label th:for="prodName">Product Name</label> 
+			<input th:field="*{prodName}" ></input>
+			<span th:errors="*{prodName}"></span><br/>
+			<label th:for="prodHandler">Product Handler</label> 
+			<input th:field="*{prodHandler}" type="text"></input><br/>
+			<label th:for="description">Product Description</label> 
+			<input th:field="*{description}" type="text"></input><br/>
+			<label th:for="category">Product Category</label> 
+			<input th:field="*{category}" type="text"></input><br/>
+			<label th:for="prodType">Product Type</label> 
+			<input th:field="*{prodType}" ></input><br/>
+			<label th:for="prodBrand">Product Brand</label> 
+			<input th:field="*{prodBrand}" type="text"></input><br/>
+			<label th:for="prodSupplier">Supplier</label> 
+			<input th:field="*{prodSupplier}" type="text"></input><br/>
+			<label th:for="supplierCode">Supplier code</label> 
+			<input th:field="*{supplierCode}" type="text"></input>
+			<span th:errors="*{supplierCode}"></span><br/>
+			<label th:for="accountCode">accountCode</label> 
+			<input th:field="*{accountCode}" type="text"></input>
+			<span th:errors="*{accountCode}"></span><br/>
+			<label th:for="purchasingCode">purchasingCode</label> 
+			<input th:field="*{purchasingCode}" type="text"></input>
+			<span th:errors="*{purchasingCode}"></span><br/>
+			<label th:for="sp">sp</label> 
+			<input th:field="*{sp}" type="text"></input>
+			<span th:errors="*{sp}"></span><br/>
+			<label th:for="image">Upload Image</label> 
+			<input th:field="*{image}" th:type="file" onchange="readURL(this);"></input>
+			<span th:errors="*{image}"></span><br/>
+			<input style="margin-left:30%" type="submit" value="Submit"></input><br></br>
+			<label style="color: green; width: 573px; height: 14px" th:text="${message}"></label>
+		</form>
+		</div>
+		<div id="imagediv">
+			<img id="prodimage" height="100%" width="100%"></img>
+		</div>
+	</main>
+	<footer data-include="footerportion"></footer>
+	
+</body>
+</html>

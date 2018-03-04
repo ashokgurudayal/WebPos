@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="ISO-8859-1"></meta>
+<title>home</title>
+<link rel="stylesheet" type="text/css" href="style.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<style>
+	table, th , td  {
+  		border: 1px solid grey;
+  		border-collapse: collapse;
+  		padding: 5px;
+	}
+	table tr:nth-child(odd) {
+		background-color: #f1f1f1;
+	}
+	table tr:nth-child(even) {
+		background-color: #ffffff;
+	}
+
+</style>
+</head>
+<body>
+	<header data-include="headerportion"></header>
+	<aside data-include="leftsidebar"></aside>
+	<main > 
+		<div ng-app="myApp" ng-controller="customersCtrl" ng-init="selectedColumnName='prodName'"> 
+		Sort By clicking on the headers of the table
+		<br></br>Filter<br></br>
+		<select ng-model="selectedColumnName" ng-options="x for x in optionss"></select>
+		<input type="text" ng-model="filterValue"></input>
+		<table>
+		    <tr>
+		    	<th ng-click="myOrderByFn('index')">Index</th>
+		    	<th ng-click="myOrderByFn('prodName')">Name</th>
+		    	<th ng-click="myOrderByFn('prodHandler')">Handler</th>
+		    	<th ng-click="myOrderByFn('description')">Description</th>
+		    	<th ng-click="myOrderByFn('category')">Category</th>
+		    	<th ng-click="myOrderByFn('prodType')">Type</th>
+		    	<th ng-click="myOrderByFn('prodBrand')">Brand</th>
+		    	<th ng-click="myOrderByFn('prodSupplier')">Supplier</th>
+		    	<th ng-click="myOrderByFn('supplierCode')">Supplier Code</th>
+		    	<th ng-click="myOrderByFn('accountCode')">Account Code</th>
+		    	<th ng-click="myOrderByFn('purchasingCode')">Purchasing Code</th>
+		    	<th ng-click="myOrderByFn('sp')">SP</th>
+		    </tr>
+  			<tr ng-repeat="x in names | filter:{prodName:filterValue}|orderBy:myOrderBy">
+  				<td>{{ $index + 1 }}</td>
+    			<td>{{ x.prodName }}</td>
+    			<td>{{ x.prodHandler }}</td>
+    			<td>{{ x.description }}</td>
+    			<td>{{ x.category }}</td>
+    			<td>{{ x.prodType }}</td>
+    			<td>{{ x.prodBrand }}</td>
+    			<td>{{ x.prodSupplier }}</td>
+    			<td>{{ x.supplierCode }}</td>
+    			<td>{{ x.accountCode }}</td>
+    			<td>{{ x.purchasingCode }}</td>
+    			<td>{{ x.sp }}</td>
+  			</tr>
+		</table>
+		</div>
+		<script>
+			var app = angular.module('myApp', []);
+			app.controller('customersCtrl', function($scope, $http) {
+    			$http.get("products").then(function (response) {$scope.names = response.data;});
+    			$scope.optionss = ["prodName","prodHandler","description"]
+    			$scope.myOrderByFn = function(x){
+    				$scope.myOrderBy = x;
+    			} 
+			});
+		</script>
+		
+	</main>
+	<footer data-include="footerportion"></footer>
+	
+</body>
+</html>
