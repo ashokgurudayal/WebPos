@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 public class ProductEntity {
 	@Id
-	private String id;
+	private String pid;
 	@NotEmpty(message="Product name should not be blank")
 	private String prodName;
 	@NotEmpty(message="Product handler should not be blank")
@@ -44,7 +44,7 @@ public class ProductEntity {
 	@NotNull(message="Please enter the selling price")
 	private Double sp;
 	@Lob
-	@Column(name="product_image", nullable=false, columnDefinition="mediumblob")
+	@Column(name="product_image", nullable=false)
 	private byte[] image;
 	
 	public byte[] getImage() {
@@ -60,7 +60,7 @@ public class ProductEntity {
 			String prodType, String prodBrand, String prodSupplier, String supplierCode, Integer accountCode,
 			Integer purchasingCode, Double sp) {
 		super();
-		this.id = id;
+		this.pid = id;
 		this.prodName = prodName;
 		this.prodHandler = prodHandler;
 		this.description = description;
@@ -76,10 +76,10 @@ public class ProductEntity {
 	}
 	
 	public String getId() {
-		return id;
+		return pid;
 	}
 	public void setId(String id) {
-		this.id = id;
+		this.pid = id;
 	}
 	public String getProdName() {
 		return prodName;

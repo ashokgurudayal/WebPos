@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,26 +21,37 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 /**
- * This is the entity class for creating the table posuser.
+ * The entity for storing the employee details who use the POS application.
  * @author Ashok Sen Gurudayal
  *
  */
 @Entity
 public class PosUser {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private long userId;
+	@NotEmpty(message="Product name should not be blank")
 	private String firstName;
 	private String lastName;
 	private char gender;
 	private String emailId;
 	private Integer phoneNo;
-	private String company;
 	private String password;
 	private String username;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "PosUser_Role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
 	private Set<Role> roles;
+	
+	@ManyToOne
+	@JoinColumn(name = "companyId")
+	private Company company;
+	
+	public Company getCompany() {
+		return company;
+	}
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	public long getUserId() {
 		return userId;
 	}
@@ -71,7 +83,6 @@ public class PosUser {
 		this.gender = user.getGender();
 		this.emailId = user.getEmailId();
 		this.phoneNo = user.getPhoneNo();
-		this.company = user.getCompany();
 		this.password = user.getPassword();
 		this.username = user.getUsername();
 		this.roles = user.getRoles();
@@ -111,12 +122,6 @@ public class PosUser {
 	}
 	public void setPhoneNo(Integer phoneNo) {
 		this.phoneNo = phoneNo;
-	}
-	public String getCompany() {
-		return company;
-	}
-	public void setCompany(String company) {
-		this.company = company;
 	}
 	public String getPassword() {
 		return password;

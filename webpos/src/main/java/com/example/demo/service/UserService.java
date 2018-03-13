@@ -3,11 +3,13 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Company;
 import com.example.demo.entity.PosUser;
 import com.example.demo.entity.ProductEntity;
 import com.example.demo.entity.Role;
@@ -45,5 +47,11 @@ public class UserService {
 	public void deleteProduct(Long id) {
 		// TODO Auto-generated method stub
 		userRepository.delete(id);
+	}
+	public Optional<PosUser> findByUsername(String userName) {
+		return userRepository.findByUsername(userName);
+	}
+	public Company findCompanyOfUser(String userName) {
+		return userRepository.findCompanyOfUser(userName);
 	}
 }

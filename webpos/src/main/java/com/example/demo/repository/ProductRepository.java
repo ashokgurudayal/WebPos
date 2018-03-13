@@ -2,8 +2,8 @@ package com.example.demo.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.demo.entity.ProductEntity;
+import com.example.demo.entity.Product;
 //DAO
-public interface ProductRepository extends CrudRepository<ProductEntity,String>{
+public interface ProductRepository extends CrudRepository<Product,Long>{
 
 }

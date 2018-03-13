@@ -53,7 +53,9 @@
 		color: white;
 		display: inline-block;
 	}
-	
+	span{
+		color:red;
+	}
 </style>
 </head>
 <body>
@@ -66,23 +68,36 @@
 	 SIGN UP</h2>
 	 <form action="/adduser" method="post" th:object="${posUser}">
 	 		<label for="firstName">First Name</label>
-	 		<input th:field="*{firstName}" placeholder="Enter the firstname"></input><br></br>
+	 		<input th:field="*{firstName}" placeholder="Enter the firstname"></input>
+			<span  th:errors="*{firstName}"></span><br/>
+	 		
 	 		<label for="lastName">Last Name</label>
-	 		<input th:field="*{lastName}"  placeholder="Enter the lastname"></input><br></br>
+	 		<input th:field="*{lastName}"  placeholder="Enter the lastname"></input>
+			<span th:errors="*{lastName}"></span><br/>
+	 		
 	 		<label for="userName">Username</label>
-	 		<input th:field="*{username}"  placeholder="Enter the Username"></input><br></br>
+	 		<input th:field="*{username}"  placeholder="Enter the Username"></input>
+			<span th:errors="*{username}"></span><br/>
+	 		
 	 		<label for="gender">Gender</label>
-			<input th:field="*{gender}" type="radio" value="M">Male</input> <input th:field="*{gender}" type="radio" value="F">Female</input><br></br> 
+			<input th:field="*{gender}" type="radio" value="M">Male</input> <input th:field="*{gender}" type="radio" value="F">Female</input>
+			<span th:errors="*{gender}"></span><br/>
+			 
 	 		<label for="emaildId">Email id</label> 
-			<input th:field="*{emailId}" type="email" placeholder="Enter the emailid"></input><br></br>
-	 		<label for="phoneNo">Phone No</label>
-			<input th:field="*{phoneNo}" type="number"></input>
-	 		<br></br>
-	 		<label for="company">Company</label>
-			<input th:field="*{company}"></input>
-	 		<br></br>
+			<input th:field="*{emailId}" type="email" placeholder="Enter the emailid"></input>
+			<span th:errors="*{emailId}"></span><br/>
+			
+	 		<label for="phoneNo" >Phone No</label>
+			<input th:field="*{phoneNo}" type="number" placeholder="Enter the phone no"></input>
+			<span th:errors="*{phoneNo}"></span><br/>
+	 		
+	 		<label for="company.name">Company</label>
+			<input th:field="*{company.name}" placeholder="Enter the company name"></input>
+			<span th:errors="*{company.name}"></span><br/>
+	 		
 	 		<label for="password">Password</label>
-	 		<input th:field="*{password}" type="text" placeholder="Enter the password"></input><br></br><br></br>
+	 		<input th:field="*{password}" type="text" placeholder="Enter the password"></input>
+	 		<span th:errors="*{password}"></span><br/><br/>
 	 		
   			<button style="margin-left:47%" type="submit">SUBMIT</button>
   			<h1 th:text="${message}"></h1>
