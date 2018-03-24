@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css"></link>
+  <style>
+	html, body 
+	{margin:0;padding:0;height:100%;}
+	body{
+	background-image: url("pos1.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	}
+	.card{
+		background: rgba(0, 0, 0, 0.4);
+	}
+	h5{
+	color:white;
+	}
+  </style>
+</head>
+<body>
+
+<div class="container">
+	
+    <h2 class="text-center pb-2"></h2>
+    <div class="row" >
+    <div class="col-lg-4 offset-lg-5 col-12 pb-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="text-center font-weight-bold">NEW COMPANY?<br></br>SIGN UP</h5>
+                    <form action="/adduser" method="post" role="form" th:object="${posUser}">
+                        <div class="form-group mb-0" >
+                            <label for="firstName" class="sr-only form-control-label">email</label>
+                            <div class="col-sm-10">
+                                <input  class="form-control form-control-sm" th:field="*{firstName}" placeholder="Enter your firstname"></input>
+                                <span class="error text-danger"  th:errors="*{firstName}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="lastName" class="sr-only form-control-label">password</label>
+                            <div class="col-sm-10">
+                                <input class="form-control form-control-sm" th:field="*{lastName}"  placeholder="Enter your lastname"></input>
+                                <span class="error text-danger"  th:errors="*{lastName}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <label for="username" class="sr-only form-control-label">verify</label>
+                            <div class="col-sm-10">
+                                <input class="form-control form-control-sm" th:field="*{username}"  placeholder="Enter your Username"></input>
+                                 <span class="error text-danger"  th:errors="*{username}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                        	<div class="col-sm-10">
+                            <label for="gender1" class="radiobutton-inline" style="color: white;">Male</label>
+                                <input  th:field="*{gender}" type="radio" value="M" ></input>
+                                 
+                            <label for="gender2" class="radiobutton-inline" style="color: white;">Female</label>
+                                <input  th:field="*{gender}" type="radio" value="F"></input>
+                            <span class="error text-danger" th:errors="*{gender}"></span>
+                             </div>
+                         </div>   
+                        
+                         <div class="form-group mb-0">
+                            <label for="emailId" class="sr-only form-control-label">verify</label>
+                            <div class="col-sm-10">
+                                <input class="form-control form-control-sm" th:field="*{emailId}"  type="email" placeholder="Enter your emailid"></input>
+                                 <span class="error text-danger" th:errors="*{emailId}"></span>
+                            </div>
+                        </div>
+                         <div class="form-group mb-0">
+                            <label for="phoneNo" class="sr-only form-control-label">verify</label>
+                            <div class="col-sm-10">
+                                <input class="form-control form-control-sm" th:field="*{phoneNo}"  type="number" placeholder="Enter your phone no"></input>
+                                 <span class="error text-danger" th:errors="*{phoneNo}"></span>
+                            </div>
+                        </div>
+                         <div class="form-group mb-0">
+                            <label for="company.name" class="sr-only form-control-label">verify</label>
+                            <div class="col-sm-10">
+                                <input class="form-control form-control-sm" th:field="*{company.name}"  placeholder="Enter your company name"></input>
+                                 <span class="error text-danger" th:errors="*{company.name}"></span>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <label for="password" class="sr-only form-control-label">verify</label>
+                            <div class="col-sm-10">
+                                <input class="form-control form-control-sm" th:field="*{password}" type="password"  placeholder="Enter your password"></input>
+                                 <span class="error text-danger" th:errors="*{password}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary btn-sm btn-block ">Register</button>
+                                <span class="font-weight-bold" style="color: white;" th:text = "${message}"></span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-12 pb-3 mr-0">
+            <div class="card h-70">
+                <div class="card-body">
+                    <h5 class="text-center mb-4 font-weight-bold ">LOGIN</h5>
+                    <form th:action="@{/app-login}" method="post">
+                        <div class="form-group mb-0 mr-0">
+                            <label for="username" class="sr-only form-control-label">Username</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" name="app_username" type="text" placeholder="Enter your username"></input>
+                            </div>
+                        </div>
+                        <div class="form-group mr-0">
+                            <label for="password" class="sr-only form-control-label">Password</label>
+                            <div class="col-sm-12">
+                                <input class="form-control" name="app_password" type="password" placeholder="Enter your password"></input>
+                            </div>
+                        </div>
+                        <div class="form-group mr-0">
+                            <div class="col-sm-12 ">
+                                <button type="submit" class="btn btn-primary btn-sm btn-block">Sign-in</button>
+                            </div>
+                        </div>
+                    </form>
+                   
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    
+</div>
+</body>
+</html>

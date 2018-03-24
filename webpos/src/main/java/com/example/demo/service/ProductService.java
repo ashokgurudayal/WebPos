@@ -3,10 +3,12 @@ package com.example.demo.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Category;
 import com.example.demo.entity.Product;
 import com.example.demo.repository.ProductRepository;
 
@@ -15,10 +17,14 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 	
+	
 	public List<Product> getAllProducts() {
 		List<Product> products = new ArrayList<>();
 		productRepository.findAll().forEach(products::add);
 		return products;
+	}
+	public List<Product> findByCategoryId(Category id){
+		return productRepository.findByCategory(id);
 	}
 	public Product getProduct(Long id) {
 		// TODO Auto-generated method stub

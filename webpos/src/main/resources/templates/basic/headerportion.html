@@ -5,14 +5,13 @@
 	<style>
 		#logoutform{
 			float:right;
-			display: inline-block;
 			background-color: white;
 		}
 	</style>
 </head>
 <body>
 	<form th:action="@{/app-logout}" id="logoutform">
-		<input  type="submit" value="Logout"></input>
+		<input class="btn btn-primary" type="submit" value="Logout"></input>
 	</form>
 </body>
 </html>

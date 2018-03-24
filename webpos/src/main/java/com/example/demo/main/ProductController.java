@@ -128,14 +128,22 @@ public class ProductController {
 		inventory.setOutlets(outlets.get(0));
 		inventoryService.addInventory(inventory);
 		
-		ProductSuppliers productSuppliers = new ProductSuppliers();
-		productSuppliers.setInventory(inventory);
-		productSuppliers.setSupplier(supplierService.findBySupplierName(suppliers));
-		productSupplierService.addProductSuppliers(productSuppliers);
+		for(String s:suppliers.split(",")) {
+			ProductSuppliers productSuppliers = new ProductSuppliers();
+			productSuppliers.setInventory(inventory);
+			productSuppliers.setSupplier(supplierService.findBySupplierName(s));
+			productSupplierService.addProductSuppliers(productSuppliers);
+		}
 		
 		//Set the attribute and values link
 		model.addAttribute("message", "ADDED SUCCESSFULLY!!!");
 		return "addproductbootstrap";
+	}
+	
+	@RequestMapping(value="/products/categoryid/{id}")
+	@ResponseBody
+	public List<Product> getProductsOfCategory(@PathVariable Long id) {
+		return productService.findByCategoryId(categoryService.getCategory(id));
 	}
 	
 	@RequestMapping(value = "/products/{id}",method=RequestMethod.PUT)

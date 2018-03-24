@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+ <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>Add Products</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-jcreate@1/dist/jquery.jcreate.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
+
+<!--  -->
+<link rel="stylesheet" href="fm.tagator.jquery.css"/>
+<style>
+		body {
+			font-family: 'Roboto';
+			margin: 0;
+			padding: 0;
+      background-color:#f7f7f7;
+		}
+		#wrapper {
+			padding: 15px;
+      margin:100px auto;
+      max-width:728px;
+		}
+		#input_tagator1 {
+			width: 300px;
+		}
+		#activate_tagator2 {
+			width: 300px;
+		}
+	</style>
+	<script src="fm.tagator.jquery.js"></script>
+	<script>
+		$(function () {
+			var $input_tagator1 = $('#input_tagator1');
+			var $activate_tagator1 = $('#activate_tagator1');
+			$activate_tagator1.click(function () {
+				if ($input_tagator1.data('tagator') === undefined) {
+					$input_tagator1.tagator({
+						autocomplete: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth'],
+						useDimmer: true
+					});
+					$activate_tagator1.val('destroy tagator');
+				} else {
+					$input_tagator1.tagator('destroy');
+					$activate_tagator1.val('activate tagator');
+				}
+			});
+			$activate_tagator1.trigger('click');
+		});
+	</script>
+<!--  -->
+
+
+<!--  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap-theme.min.css"></link>
+    <link rel="stylesheet" href="bootstrap-tagsinput.css"></link>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+    <script src="bootstrap-tagsinput.min.js"></script>
+    <script src="bootstrap-tagsinput-angular.min.js"></script>
+  
+     <link rel="stylesheet" href="app.css"></link>
+     
+  -->
+<script>
+	// <![CDATA[
+	/*Function inorder to load and display the image for the customer*/
+	function readURL(input) {
+	
+        if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#prodimage')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+    }
+	$(document).ready(function(){
+		//Function to invoke the ajax controller while clicking on the add attributes link
+		$("#addAttributesLink").click(function(){
+			additionDiv = ("#addAttributesDiv");
+			console.log("starttttttttttt");
+			var appendString = '<div class="row" id="addAttributesDiv" >'+
+			'<div class="col-sm-5 pr-0">'+
+			'<select name="attributeName" id="attributeSelectInput" class="form-control form-control-sm "  >'+
+    			'<option value="" label="Select an item"></option>';
+    			
+    			
+    			$.ajax({
+    			    url : "attributes",
+    			    type : "get",
+    			    async: false,
+    			    success : function(data, status){
+    		            $.each(data, function(i,obj){
+    		            	console.log(obj.name);
+    		            	appendString = appendString+'<option value="'+obj.name+'">'+obj.name+'</option>';
+    		            });
+    		        }
+    			    });
+    			
+			appendString = appendString+
+	    			'</select>'+
+				'</div>'+
+				'<div class="col-sm-5 px-0">'+
+					'<input class="form-control form-control-sm " name="attributeValue" type="text"></input>'+
+				'</div>'+
+				'<div class="col-sm-2 ">'+
+				'<button type="button" id="xButton" class="close" aria-label="Close">'+
+				  '<span aria-hidden="true">&times;</span>'+
+				'</button>'+
+				'</div>'+
+			'</div>';
+			console.log(appendString);
+			$(additionDiv).append(appendString);
+		});
+		$('#addAttributesDiv').on('click','#xButton',function() {
+			console.log("reached here");
+		    $(this).parent().parent().remove();
+		});
+		 $("#categoryform").submit(function (event) {
+			//stop submit the form, we will post it manually.
+		        event.preventDefault();
+		        fire_ajax_submit();
+		 });
+		 function fire_ajax_submit() {
+
+			 	val = $("#categoryform").serialize();
+
+			    $.ajax({
+			        type: "POST",
+			        url: "/addCategoryAjax",
+			        data: val,
+			        cache: false,
+			        timeout: 600000,
+			        success: function (data) {
+			        	$('#addCategorySuccessMessage').text(data);
+			        	/*
+			            var json = "<h4>Ajax Response</h4><pre>"
+			                + JSON.stringify(data, null, 4) + "</pre>";
+			            $('#feedback').html(json);
+			            */
+			            console.log("SUCCESS : ", data);
+
+			        },
+			        error: function (e) {
+			        	$('#addCategorySuccessMessage').text(e.responseText);
+			        	/*
+			            var json = "<h4>Ajax Response</h4><pre>"
+			                + e.responseText + "</pre>";
+			            $('#feedback').html(json);
+						*/
+			            console.log("ERROR : ", e);
+			            
+
+			        }
+			    });
+
+			}
+		 //To invoke the ajax method when the supplier form is clicked
+		 $("#supplierform").submit(function (event) {
+				//stop submit the form, we will post it manually.
+			        event.preventDefault();
+			        fire_ajax_submit_supplier();
+			 });
+			 function fire_ajax_submit_supplier() {
+
+				 	val = $("#supplierform").serialize();
+
+				    $.ajax({
+				        type: "POST",
+				        url: "/addSupplierAjax",
+				        data: val,
+				        cache: false,
+				        timeout: 600000,
+				        success: function (data) {
+				        	$('#addSupplierSuccessMessage').text(data);
+				        	/*
+				            var json = "<h4>Ajax Response</h4><pre>"
+				                + JSON.stringify(data, null, 4) + "</pre>";
+				            $('#feedback').html(json);
+				            */
+				            console.log("SUCCESS : ", data);
+
+				        },
+				        error: function (e) {
+				        	$('#addAttributeSuccessMessage').text(e.responseText);
+				        	/*
+				            var json = "<h4>Ajax Response</h4><pre>"
+				                + e.responseText + "</pre>";
+				            $('#feedback').html(json);
+							*/
+				            console.log("ERROR : ", e);
+				            
+
+				        }
+				    });
+
+				}
+			 
+			 $("#attributeform").submit(function (event) {
+					//stop submit the form, we will post it manually.
+				        event.preventDefault();
+				        fire_ajax_submit_attribute();
+				 });
+				 function fire_ajax_submit_attribute() {
+
+					 	val = $("#attributeform").serialize();
+
+					    $.ajax({
+					        type: "POST",
+					        url: "/addAttributesAjax",
+					        data: val,
+					        cache: false,
+					        timeout: 600000,
+					        success: function (data) {
+					        	$('#addAttributeSuccessMessage').text(data);
+					        	/*
+					            var json = "<h4>Ajax Response</h4><pre>"
+					                + JSON.stringify(data, null, 4) + "</pre>";
+					            $('#feedback').html(json);
+					            */
+					            console.log("SUCCESS : ", data);
+
+					        },
+					        error: function (e) {
+					        	$('#addAttributeSuccessMessage').text(e.responseText);
+					        	/*
+					            var json = "<h4>Ajax Response</h4><pre>"
+					                + e.responseText + "</pre>";
+					            $('#feedback').html(json);
+								*/
+					            console.log("ERROR : ", e);
+					            
+
+					        }
+					    });
+
+					}
+		 //jQuery function to update the categories when the add new categories dialog is closed
+		 $(".addCategoryCloseButton").click(function() {
+		 		$("#categorySelectInput").find('option').remove();
+		 		//$('#categorySelectInput').children().remove();
+			 	$("#categorySelectInput").append('<option value="">Select a category</option>');
+		 
+			 	$.ajax({
+			    	url : "category",
+			    	type : "get",
+			    	async: false,
+			    	success : function(data, status){
+		            	$.each(data, function(i,obj){
+		            		appendString = '<option value="'+obj.name+'">'+obj.name+'</option>';
+		            		console.log(appendString);
+		                	$("#categorySelectInput").append(appendString);
+		            	});
+		        	}
+			    });
+		 });
+		//jQuery function to update the categories when the add new categories dialog is closed
+		 $(".addAttributeCloseButton").click(function() {
+		 		$("#addAttributesDiv select").find('option').remove();
+		 		//$('#categorySelectInput').children().remove();
+			 	$("#addAttributesDiv select").append('<option value="">Select a category</option>');
+		 
+			 	$.ajax({
+			    	url : "attributes",
+			    	type : "get",
+			    	async: false,
+			    	success : function(data, status){
+		            	$.each(data, function(i,obj){
+		            		appendString = '<option value="'+obj.name+'">'+obj.name+'</option>';
+		            		console.log(appendString);
+		            		$("#addAttributesDiv select").append(appendString);
+		            	});
+		        	}
+			    });
+		 });
+		 $("#customtaxradiobutton").click(function() {
+			 $("#taxpercentagediv").slideDown();	 
+		 });
+		 $("#defaulttaxradiobutton").click(function() {
+			 $("#taxpercentagediv").slideUp();	 
+		 });
+		 
+	});
+    // ]]>
+	</script>
+</head>
+<body>
+
+	<div class="container-fluid h-100">
+ 		<div class="row" style="height:10%">
+			<header  class="col" data-include="headerportion"></header>
+   		</div>
+   <div class="row" style="height:80%">
+   <aside class="col-sm-2"  data-include="leftsidebar"></aside>
+   <main  class="col-sm-10">
+   		<div class="row justify-content-center">
+			<span  class="text-primary text-center">Enter the product details and Submit</span>
+   		</div>
+   		<div class="row" >
+		<div class="offset-3 col-sm-3" ng-app="drpdwnApp" ng-controller="drpdwnCtrl">
+		<form action="/addproduct" method="post"  th:object="${product}">
+			
+			<div class="formgroup">
+				<label class="font-weight-bold" for="upccode">Upccode</label>
+				<input class="form-control form-control-sm " th:field="*{upccode}" type="text"></input>
+				<span class="error text-danger" th:errors="*{upccode}"></span>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="name">Name</label>
+				<input class="form-control form-control-sm " th:field="*{name}" type="text"></input>
+				<span class="error text-danger" th:errors="*{name}"></span>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="description">Description</label>
+				<textarea class="form-control form-control-sm " rows="4" cols="50" th:field="*{description}"></textarea>
+				<span class="error text-danger" th:errors="*{description}"></span>
+			</div>
+			<div  class="formgroup">
+				<label class="font-weight-bold" for="category">Category</label>
+				<select name="categoryy" id="categorySelectInput" class="form-control form-control-sm " ng-model="dgdrgddd" ng-options="item.name for item in categoryNames track by item.name">
+        			<option value="item.name" label="Select an item"></option>
+    			</select>
+    			<a href="#" data-toggle="modal" type="link" data-target="#addNewCategory">
+    			Add New Category
+  				</a>
+			</div>
+			
+			<div class="formgroup">
+				<div class="row">
+					<div class="col">
+					<label class="font-weight-bold" for="attributes">Attributes</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+					Name
+					</div>
+					<div class="col-6">
+					Value
+					</div>
+				</div>
+				<div class="row" id="addAttributesDiv" >
+					<div class="col-sm-5 pr-0">
+						<select name="attributeName" id="attributeSelectInput" class="form-control form-control-sm " ng-model="dgdrgd" ng-options="item.name for item in attributesNames track by item.name">
+		        			<option value="" label="Select an item"></option>
+		    			</select>
+					</div>
+					<div class="col-sm-5 px-0">
+						<input class="form-control form-control-sm" name="attributeValue"  type="text"></input>
+					</div>
+					<div class="col-sm-2 ">
+						
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col">
+						<a   href="#"  data-toggle="modal" type="link"  data-target="#addNewAttribute">Add a new attribute</a>
+						
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<a id="addAttributesLink" href="#" >Add more attributes</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<label class="font-weight-bold" for="suppliers">Suppliers</label>
+						<input class="form-control form-control-sm" name="suppliers"  type="text"></input>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<a   href="#"  data-toggle="modal" type="link"  data-target="#addNewSupplier">Add a new supplier</a>
+					</div>
+				</div>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" th:for="image">Upload Image</label> 
+				<input th:field="*{productImage}" th:type="file" onchange="readURL(this);"></input>
+				<span class="error text-danger" th:errors="*{productImage}"></span>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" >Pricing</label> 
+				<div class="row">
+					<div class="col">
+						<label  for="costprice">Cost Price</label>
+						<input class="form-control form-control-sm" th:field="*{costPrice}"  name="costprice"  type="text"></input>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<label class="font-weight-bold"  for="tax">Tax</label>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col">
+						<input checked="checked" class="form-control form-control-sm px-auto py-auto" id="defaulttaxradiobutton"  name="tax"  type="radio" value="default"></input>
+					</div>
+					<div class="col">
+						<label for="tax1" >Default</label>
+					</div>
+					<div class="col">
+						<input  class="form-control form-control-sm px-auto py-auto" id="customtaxradiobutton"   name="tax"  type="radio" value="custom"></input>
+					</div>
+					<div class="col">
+						<label for="tax2" >Custom</label>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col">
+						<div style="display: none" id="taxpercentagediv" class="col">
+							<label for="taxPercentage">Enter the tax percentage</label>
+							<input class="form-control form-control-sm" th:field="*{taxPercentage}" type="text"></input>
+					</div>
+					</div>
+				</div>
+			</div>
+			<br></br>
+			<div class="form-group">
+                <div class="form-group">
+                       <button type="submit" class="btn btn-primary btn-sm btn-block ">Add Product</button>
+                </div>
+            </div>
+			<span th:text="${message}"></span>
+			
+		</form>
+		</div>
+		<div class="col-sm-3 offset-2 mt-1">
+			<div class="col-sm-9">
+			<img id="prodimage" class="img-fluid rounded" src="arrow-upload-icon.png"></img>
+			</div>
+			
+		</div>
+		</div>
+	</main>
+	</div>
+	<div class="row" style="height:10%">
+	<footer class="col" data-include="footerportion"></footer>
+	</div>
+	
+	 <!-- The Category Modal -->
+  <div class="modal fade" id="addNewCategory">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add a new category</h4>
+          <button type="button" class="close addCategoryCloseButton" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        <form id="categoryform">
+          <div class="formgroup">
+				<label class="font-weight-bold" for="name">category Name</label>
+				<input class="form-control form-control-sm"  type="text" id="categorynameee" name="name"></input>
+				
+			</div>
+				
+			<div class="formgroup">
+				<label class="font-weight-bold" for="description">category Description</label>
+				<textarea class="form-control form-control-sm" name="description" id="categorydescriptionnn" rows="4" cols="50" ></textarea>
+				<label id="categorydescriptionerror" class="text-danger"></label>
+			</div>
+			<div class="form-group">
+                <div class="form-group">
+                       <button id="addCategoryButton" class="btn btn-primary btn-sm btn-block ">Submit</button>
+                </div>
+            </div>
+            <label id="addCategorySuccessMessage" value="waiting" class="text-success" ></label>
+            <span th:text="${ErrorName}"></span>
+            </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button"  class="btn btn-danger addCategoryCloseButton" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+	 <!-- The Attribute Modal -->
+  <div class="modal fade" id="addNewAttribute">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add a new Attribute</h4>
+          <button type="button" class="close addAttributeCloseButton" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        <form id="attributeform">
+          <div class="formgroup">
+				<label class="font-weight-bold" for="name">Attribute Name</label>
+				<input class="form-control form-control-sm"  type="text" id="attributenameee" name="name"></input>
+				
+			</div>
+				
+			<div class="formgroup">
+				<label class="font-weight-bold" for="description">Attribute Description</label>
+				<textarea class="form-control form-control-sm" name="description" id="attributedescriptionnn" rows="4" cols="50" ></textarea>
+				<label id="attributedescriptionerror" class="text-danger"></label>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="values">Common Attribute Values</label>
+				<input class="form-control form-control-sm"  type="text" id="values" name="values"></input>
+			</div>
+			<div class="form-group">
+                <div class="form-group">
+                       <button id="addAttributeButton" class="btn btn-primary btn-sm btn-block ">Submit</button>
+                </div>
+            </div>
+            <label id="addAttributeSuccessMessage" value="waiting" class="text-success" ></label>
+            </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button"  class="btn btn-danger addAttributeCloseButton" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  	 <!-- The Supplier Modal -->
+  <div class="modal fade" id="addNewSupplier">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add a new supplier</h4>
+          <button type="button" class="close addCategoryCloseButton" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        <form id="supplierform">
+          <div class="formgroup">
+				<label class="font-weight-bold" for="name">Supplier Name</label>
+				<input class="form-control form-control-sm"  type="text"  name="supplier_name"></input>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="phone">Phone</label>
+				<input class="form-control form-control-sm"  type="number"  name="phone_no"></input>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="emailid">Email Id</label>
+				<input class="form-control form-control-sm"  type="text"  name="email_id"></input>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="description">Description</label>
+				<textarea class="form-control form-control-sm" name="supplier_description" id="categorydescriptionnn" rows="4" cols="50" ></textarea>
+				<label id="categorydescriptionerror" class="text-danger"></label>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" >Address</label><br></br>
+				<div class="row">
+					<div class="col-2">
+						<label class="text-inline" for="line1">Line 1</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="line_1"></input>
+					</div>
+					<div class="col-2">
+						<label class="text-inline" for="line2">Line 2</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="line_2"></input>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-2">
+						<label class="text-inline" for="line3">Line 3</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="line_3"></input>
+					</div>
+					<div class="col-2">
+						<label class="text-inline" for="line2">Line 4</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="line_4"></input>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-2">
+						<label class="text-inline" for="city">City</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="city"></input>
+					</div>
+					<div class="col-2">
+						<label class="text-inline" for="zipcode">Zipcode</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="zipcode"></input>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-2">
+						<label class="text-inline" for="state">State</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="state"></input>
+					</div>
+					<div class="col-2">
+						<label class="text-inline" for="country">Country</label>
+					</div>
+					<div class="col-4">
+						<input class="form-control form-control-sm"  type="text"  name="country"></input>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+                <div class="form-group">
+                       <button id="addCategoryButton" class="btn btn-primary btn-sm btn-block ">Submit</button>
+                </div>
+            </div>
+            <label id="addSupplierSuccessMessage" value="waiting" class="text-success" ></label>
+            <span th:text="${ErrorName}"></span>
+            </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button"  class="btn btn-danger addCategoryCloseButton" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+	 <!-- The Attribute Modal -->
+  <div class="modal fade" id="addNewAttribute">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Add a new Attribute</h4>
+          <button type="button" class="close addAttributeCloseButton" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+        <form id="attributeform">
+          <div class="formgroup">
+				<label class="font-weight-bold" for="name">Attribute Name</label>
+				<input class="form-control form-control-sm"  type="text" id="attributenameee" name="name"></input>
+				
+			</div>
+				
+			<div class="formgroup">
+				<label class="font-weight-bold" for="description">Attribute Description</label>
+				<textarea class="form-control form-control-sm" name="description" id="attributedescriptionnn" rows="4" cols="50" ></textarea>
+				<label id="attributedescriptionerror" class="text-danger"></label>
+			</div>
+			<div class="formgroup">
+				<label class="font-weight-bold" for="values">Common Attribute Values</label>
+				<input class="form-control form-control-sm"  type="text" id="values" name="values"></input>
+			</div>
+			<div class="form-group">
+                <div class="form-group">
+                       <button id="addAttributeButton" class="btn btn-primary btn-sm btn-block ">Submit</button>
+                </div>
+            </div>
+            <label id="addAttributeSuccessMessage" value="waiting" class="text-success" ></label>
+            </form>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button"  class="btn btn-danger addAttributeCloseButton" data-dismiss="modal">Close</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  </div>
+  <script>
+		var app = angular.module('drpdwnApp', []);
+		
+		app.controller('drpdwnCtrl', function($scope, $http) {
+   			$http.get("category").then(function (response) {
+   				$scope.categoryNames = response.data;
+   			});
+   			$http.get("attributes").then(function (response) {
+   				$scope.attributesNames = response.data;
+   			});
+   			console.log("okay added scope.categoryNames");
+   			console.log($scope);
+		});
+		
+</script>
+</body>
+</html>

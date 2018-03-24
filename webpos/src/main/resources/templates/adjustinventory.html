@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+ <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>home</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
+<script>
+$(document).ready(function(){
+		$("#adjustinventoryform").submit(function (event) {
+			//stop submit the form, we will post it manually.
+		        event.preventDefault();
+		        fire_ajax_submit();
+		 });
+		 function fire_ajax_submit() {
+		
+			 	val = $("#adjustinventoryform").serialize();
+		
+			    $.ajax({
+			        type: "POST",
+			        url: "/updateInventoryAjax",
+			        data: val,
+			        cache: false,
+			        timeout: 600000,
+			        success: function (data) {
+			        	$('#adjustinventoryresponse').text(data);
+			        	$('#adjustinventoryresponse').addClass("text-success");
+			        	/*
+			            var json = "<h4>Ajax Response</h4><pre>"
+			                + JSON.stringify(data, null, 4) + "</pre>";
+			            $('#feedback').html(json);
+			            */
+			            console.log("SUCCESS : ", data);
+			            angular.element('#mycontroller').scope().updateinventory();
+			            angular.element('#mycontroller').scope().$apply() 
+			        },
+			        error: function (e) {
+			        	$('#adjustinventoryresponse').text(e.responseText);
+			        	/*
+			            var json = "<h4>Ajax Response</h4><pre>"
+			                + e.responseText + "</pre>";
+			            $('#feedback').html(json);
+						*/
+						$('#adjustinventoryresponse').addClass("text-danger");
+			            console.log("ERROR : ", e);
+			            
+		
+			        }
+			    });
+		
+			}
+});
+</script>
+	</head>
+<body>
+
+  <div class="container-fluid h-100">
+  <div class="row" style="height:10%">
+	<header  class="col" data-include="headerportion"></header>
+   </div>
+   <div class="row" style="height:80%">
+	<aside  class="col-sm-2" data-include="leftsidebar"></aside>
+	<main   class="col-sm-10">
+	<div id="mycontroller" ng-app="myApp" ng-controller="customersCtrl" ng-init="selectedColumnName='prodName'"> 
+		<br></br><span class="text-info">Filter by Name or Category</span>
+		<select ng-model='selectedColumnName'   ng-options="x for x in optionss track by x">
+			<option class="text-info" style="display:none" value="">select a type</option>
+		</select>
+		
+		<input type="text" ng-model="filterBox" ></input><br></br>
+		<span class="text-primary">Sort By clicking on the headers of the table</span>
+		<form  id="adjustinventoryform">
+		<div class="table-responsive">
+		<table class="table">
+		    <tr>
+		    	<th Hidden="Hidden"></th>
+		    	<th ng-click="myOrderByFn('index')">Index</th>
+		    	<th ng-click="myOrderByFn('inventory.product.upccode')">Upccode</th>
+		    	<th ng-click="myOrderByFn('inventory.product.name')">Name</th>
+		    	<th ng-click="myOrderByFn('inventory.product.category.name')">Category</th>
+		    	<th ng-click="myOrderByFn('supplier.supplier_name')">Supplier</th>
+		    	<th ng-click="myOrderByFn('units')">Units</th>
+		    	<th ng-click="myOrderByFn('weight')">Weight</th>
+		    	<th ng-click="myOrderByFn('inventory.units_available')">Total Units</th>
+		    	<th ng-click="myOrderByFn('inventory.total_weight')">Total Weight</th>
+		    </tr>
+  			<tr ng-repeat="x in names | filter:searchh|orderBy:myOrderBy">
+  				<td Hidden="Hidden"><input type="text" name="prodsupplierid" value="{{ x.product_supplier_id }}"></input></td>
+  				<td>{{ $index + 1 }}</td>
+    			<td>{{ x.inventory.product.upccode }}</td>
+    			<td>{{ x.inventory.product.name }}</td>
+    			<td>{{ x.inventory.product.category.name	 }}</td>
+    			<td>{{ x.supplier.supplier_name }}</td>
+    			<td><input class="form-control form-sontrol-sm" name="units" type="text" value="{{ x.units }}"></input></td>
+    			<td><input class="form-control form-sontrol-sm" name="weight" type="text" value="{{ x.weight }}"></input></td>
+    			<td>{{ x.inventory.units_available }}</td>
+    			<td>{{ x.inventory.total_weight }}</td>
+    			
+  			</tr>
+		</table>
+		</div>
+		<Button class="btn btn-primary" >Adjust Inventory</Button><br></br>
+		<span  id="adjustinventoryresponse"></span>
+		</form>
+		</div>
+		<script>
+		
+			var app = angular.module('myApp', []);
+			app.controller('customersCtrl', function($scope, $http) {
+    			$http.get("productsuppliers").then(function (response) {$scope.names = response.data;});
+    			$scope.optionss = ["Name","Category"]
+    			$scope.myOrderByFn = function(x){
+    				$scope.myOrderBy = x;
+    			} 
+    			$scope.updateinventory=function(){
+    				$http.get("productsuppliers").then(function (response) {$scope.names = response.data;});
+    			}
+    			$scope.searchh = function (x) {
+    				console.log($scope);
+    				var colu = $scope.selectedColumnName;
+    				console.log("name inside search selected")
+    				if($scope.filterBox == undefined)
+    					return true;
+					if($scope.selectedColumnName=="Category"){
+						if(x.inventory.product.category.name.startsWith($scope.filterBox))
+							return true;
+						else 
+							return false;
+					}
+					
+    			    
+    			    else if($scope.selectedColumnName=="Name"){
+						if(x.inventory.product.name.startsWith($scope.filterBox))
+							return true;
+						else 
+							return false;
+					}
+    			    else
+    			    	return true;
+    			};
+    			
+			});
+		</script>
+	</main>
+	</div>
+	<div class="row" style="height:10%">
+	<footer class="col"  data-include="footerportion"></footer>
+	</div>
+  </div>
+</body>
+</html>

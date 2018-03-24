@@ -96,7 +96,7 @@
 			<span th:errors="*{company.name}"></span><br/>
 	 		
 	 		<label for="password">Password</label>
-	 		<input th:field="*{password}" type="text" placeholder="Enter the password"></input>
+	 		<input th:field="*{password}" type="password" placeholder="Enter the password"></input>
 	 		<span th:errors="*{password}"></span><br/><br/>
 	 		
   			<button style="margin-left:47%" type="submit">SUBMIT</button>
@@ -111,7 +111,7 @@
   			<input name="app_username" type="text" placeholder="Enter the username"></input><br></br>
   			
   			<label for="password">Password</label>
-  			<input type="app_password" placeholder="Enter the password"></input>
+  			<input name="app_password" type="password" placeholder="Enter the password"></input>
   			<br></br><br></br>
   			<button style="margin-left:50%" type="submit">SUBMIT</button>
   		</form>

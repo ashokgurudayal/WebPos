@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+ <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>home</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	</head>
+<body>
+
+  <div class="container-fluid h-100" ng-app="myapp" ng-controller="orderscontroller">
+  <div class="row" style="height:10%">
+	<header  class="col" data-include="headerportion"></header>
+   </div>
+   <div class="row" style="height:80%">
+	<aside  class="col-sm-2" data-include="leftsidebar"></aside>
+	<main   class="col-sm-10">
+	Select the date
+	<input type="text" id="datepicker"></input><br></br><br></br>
+	<div class="card" ng-repeat-start="order in orderdetails track by $index">
+		<div class="card-header">
+			<label for="#orderno">Order No:</label>
+			<span id="orderno" ng-bind="$index+1"></span><br/>
+			<label for="#createdtime">Created Time:</label>
+			<span id="createdtime" ng-bind="order.createts"></span>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+			<table class="table">
+				<tr>
+					<th>Sl.No</th>
+					<th>Product</th>
+					<th>Units</th>
+					<th>Weight</th>
+					<th>Cost Price</th>
+					<th>Tax</th>
+				</tr>
+				<tr ng-repeat="orderitem in order.orderItems">
+					<td ng-bind="$index+1"></td>
+					<td ng-bind="orderitem.inventory.product.name"></td>
+					<td ng-bind="orderitem.units"></td>
+					<td ng-bind="orderitem.weight"></td>
+					<td ng-bind="orderitem.costPrice"></td>
+					<td ng-bind="orderitem.taxValue"></td>
+				</tr>
+			</table>
+			</div>
+			
+		</div>
+		<div class="card-footer">
+			<label for="totalcostprice">Total Cost Price:</label>
+			<span id="totalcostprice" ng-bind="order.total_amount"></span><br/>
+			<label for="totaltax">Total Tax:</label>
+			<span id="totaltax" ng-bind="order.total_tax"></span>
+		</div>
+	</div><br><br ng-repeat-end="ng-repeat-end" /></br>
+
+	</main>
+	</div>
+	<div class="row" style="height:10%">
+	<footer class="col"  data-include="footerportion"></footer>
+	</div>
+  </div>
+  <script>
+  		var app = angular.module('myapp',[]);
+  		app.controller('orderscontroller',function($scope,$http){
+  			$http.get('getallorders').then(function(response){
+  				$scope.orderdetails = response.data;
+  			});
+  		});
+  		$( function() {
+  		    
+  		  	$('#datepicker').datepicker();
+  			$('#datepicker').datepicker('setDate', 'today');
+  		});
+  </script>
+</body>
+</html>

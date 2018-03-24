@@ -20,6 +20,22 @@ public class mainController {
 		model.addAttribute(new PosUser());
 		return "userloginbootstrap";
 	}
+	@RequestMapping("/showsales")
+	public String showSales(Model model) {
+		return "showsales";
+	}
+	@RequestMapping("/adjustinventory")
+	public String adjustInventory(Model model){
+		return "adjustinventory";
+	}
+	@RequestMapping("/posbootstrap")
+	public String posBootstrap(Model model){
+		return "posbootstrap";
+	}
+	@RequestMapping("/posbootstrapnewformat")
+	public String posBootstrapnewlayout(Model model){
+		return "posbootstrapnewlayout";
+	}
 	@RequestMapping("/R")
 	public String userLoginR(Model model) {
 
@@ -62,10 +78,7 @@ public class mainController {
 		return "removeproduct";
 	}
 
-	@RequestMapping("/adjustinventory")
-	public String adjustInventory(Model model) {
-		return "adjustinventory";
-	}
+	
 
 	@RequestMapping("basic/leftsidebar")
 	public String leftSideBar(Model model) {
@@ -89,7 +102,7 @@ public class mainController {
 
 	@RequestMapping("/pos")
 	public String pospage(Model model) {
-		return "pos";
+		return "posbootstrap";
 	}
 	@RequestMapping("/testingpagee")
 	public String testingpagee(Model model) {

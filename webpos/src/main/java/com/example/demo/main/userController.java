@@ -40,7 +40,7 @@ public class userController {
 	public String addTopic(@Valid @ModelAttribute  PosUser posUser,BindingResult bindingResult,Model model) throws IOException {
 		if(bindingResult.hasErrors()) {
 			System.out.println("ErrorCount"+bindingResult.getErrorCount());
-			return "userlogin";
+			return "userloginbootstrap";
 		}
 		//check if the company name is already taken up
 		//If not,then add the user and the company details into the database
@@ -57,12 +57,12 @@ public class userController {
 			
 			userService.addUser(posUser);
 			model.addAttribute("message", "ADDED SUCCESSFULLY!!!");
-			return "userlogin";
+			return "userloginbootstrap";
 		}
 		//If the company is already taken up,then show up a message that the company name is already taken
 		else {
 			bindingResult.rejectValue("company.name", "error.user", "An account already exists for this email.");
-			return "userlogin";
+			return "userloginbootstrap";
 		}
 		
 		

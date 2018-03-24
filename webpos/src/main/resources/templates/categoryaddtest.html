@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1"></meta>
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("#addCategoryButton").click(function(){
+    val = $("#addcategoryform").serialize();
+    $.ajax({
+    	  url: "addCategory",
+    	  type: "POST",
+    	  data: val,
+    	  success: function(data){
+    		  $('#addCategorySuccessMessage').val("added successfully");
+    	  }
+    	});
+    });
+});
+</script>
+</head>
+<body>
+<form id="addcategoryform">
+<label class="font-weight-bold" for="name">category Name</label>
+				<input class="form-control form-control-sm"  type="text" name="name"></input>
+				<label class="font-weight-bold" for="description">category Description</label>
+				<textarea class="form-control form-control-sm" name="description" rows="4" cols="50" ></textarea>
+				<button id="addCategoryButton" class="btn btn-primary btn-sm btn-block ">Submit</button>
+				 <span id="addCategorySuccessMessage" class="text-success" ></span>
+</form>
+</body>
+</html>
