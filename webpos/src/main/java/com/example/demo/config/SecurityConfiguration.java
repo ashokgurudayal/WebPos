@@ -21,10 +21,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	 @Autowired
+	 private CustomSuccessHandler customSuccessHandler;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-		auth.userDetailsService(userDetailsService)
-		.passwordEncoder(getPasswordEncoder());
+		auth.userDetailsService(userDetailsService);
 	}
 	
 	@Override
@@ -34,11 +36,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.antMatchers("**/products/**").authenticated()
 		.anyRequest().permitAll()
 		.and().formLogin()
-		.loginPage("/")
+		.loginPage("/").successHandler(customSuccessHandler)
 		.loginProcessingUrl("/app-login")
 		.usernameParameter("app_username")
 		.passwordParameter("app_password")
-		.defaultSuccessUrl("/home")
 		.and().logout()
 		.logoutUrl("/app-logout")
 		.logoutSuccessUrl("/")

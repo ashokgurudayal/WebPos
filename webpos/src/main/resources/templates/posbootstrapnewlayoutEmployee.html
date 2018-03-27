@@ -42,11 +42,7 @@
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-#barcodemodediv{
-	background: url('green1.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
-}
+
 </style>
 	</head>
 <body>
@@ -55,7 +51,7 @@
   <!-- Bill columns and button columns row -->
   <div class="row"   style="height:80%">
   		<!-- Bill columns -->
-		<div id="billingrow"  class="col-4" >
+		<div  class="col-4" >
 			<!-- Billing Table  -->
 			<div class="row" style="background-color: white;height: 80%;">
 				<div id="billingcolumn" class="table-responsive">
@@ -101,23 +97,19 @@
 						<span ng-if="products==undefined" class="text-info font-weight-bold"><br></br>Please select a category to get started</span>
 						<span ng-if="products.length==0" class="text-info font-weight-bold"><br></br>No Products in the selected category</span>
 			</div>
-			<div class="px-5" id="barcodemodediv" style="height: 100%;margin-right: -15px;margin-left: -15px;display:none;">
-				<span class="text-info">Use a Barcode Scanner or enter the Upccode and press the button</span>
-				<br></br>
-				<input class="form-control form-control-sm col-6" id="upccode"  type="text"></input>
-				<button ng-click="getProductOfUpccode()" class="btn btn-primary" id="addwithupccode">ADD</button>
-			</div>
+			
 		</div>
 	</div>
 	<!-- The bottom row that holds the options buttons -->
 	<div class="row" id="bottomButtonsPanel" style="height: 20%;align-items: center;">
 		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;color: white;width:9%;height:80%;text-align: cen" onclick="toggleFullScreen(document.documentElement)">TOGGLE FULLSCREEN</a>
-		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width:9%;height:80%" href="home">HOME</a>
 		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" href="app-logout">LOGOUT</a>
 		<a class="btn-sm btn-primary btn-block disabled mx-2" id="undobutton" style="text-decoration: none;color: black;width:9%;height:80%" ng-click="disableBtn||undo()">UNDO</a>
 		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" data-toggle="modal" data-target="#paymenttypemodal" href="#">PAY</a>
-		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" href="pos" >SWITCH VIEW</a>
-		<a class="btn-sm btn-primary btn-block mx-2" id="barcodemode"  style="text-decoration: none;width:9%;height:80%" href="#" >BARCODE MODE</a>
+		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" href="posemployee" >SWITCH VIEW</a>
+		<div class="btn-block" style="width: 9%">
+			<a class="btn-sm btn-primary disabled" ng-click="decreasefn()" style="text-decoration: none;width: 20%;display: inline-block;text-align: center;" >-</a><span style="width: 60%;display: inline-block;text-align: center;">BUTTONS</span><a class="btn-sm btn-primary" ng-click="increasefn()" style="text-decoration: none;width: 20%;display: inline-block;text-align: center;">+</a>
+		</div>
 		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width: 9%;height: 80%;" ng-click="removeallrows()" href="">CLEAR ALL</a>
 		<a class="btn-sm btn-primary btn-block mx-2" id="viewSwitch" style="text-decoration: none;width: 9%;height: 80%;" href="">POWER SAVING MODE</a>
 	</div>
@@ -225,15 +217,7 @@
 		 $scope.number = $scope.number+1;
 		 $scope.width = 80/$scope.number+'%';
 	 }
-	//The angularjs function to get the products upon clicking Add button in Barcode mode.
-	 $scope.getProductOfUpccode = function(){
-		 $http.get("/products/upccode/"+$('#upccode').val()).then(function(response){
-			 $scope.addProductsToBill(response.data);
-			
-		 }) ;
-		
-		 
-	 }
+	 
 	 //The angularjs function to populate the products upon clicking category button.
 	 $scope.populateProductsOfCategory = function(x){
 		 $('button').removeClass('btn-primary').addClass('btn-secondary');
@@ -341,26 +325,6 @@
 		  $scope.totaltax = 0.0;
 		  $scope.tablecount = 0;
 	  }
-  });
-  
-  $("#barcodemode").click(function(){
-	 if(!$("#barcodemode").hasClass('active')){
-		 $("#barcodemodediv").show();
-		 $("#categorybuttonsdiv").hide();
-		 $("#productbuttonsdiv").hide();
-		 $("#barcodemode").addClass('active');
-		 $('#productbuttonspanel').removeClass('col-8').addClass('col-4');
-		 $('#billingrow').removeClass('col-4').addClass('col-8');
-	 }
-	 else{
-		 $("#barcodemodediv").hide();
-		 $("#categorybuttonsdiv").show();
-		 $("#productbuttonsdiv").show();
-		 $("#barcodemode").removeClass('active');
-		 $('#productbuttonspanel').removeClass('col-4').addClass('col-8');
-		 $('#billingrow').removeClass('col-8').addClass('col-4');
-	 }
-	 
   });
   $('#viewSwitch').click(function(){
 	  if($('#viewSwitch').text() == 'POWER SAVING MODE ON'){

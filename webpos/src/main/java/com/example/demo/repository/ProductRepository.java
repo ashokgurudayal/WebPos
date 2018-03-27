@@ -11,4 +11,6 @@ import com.example.demo.entity.Product;
 public interface ProductRepository extends CrudRepository<Product,Long>{
 	
 	List<Product> findByCategory(Category category);
+	
+	Product findByupccode(long upcCode);
 }

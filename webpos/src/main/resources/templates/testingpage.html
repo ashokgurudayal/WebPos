@@ -1,71 +1,338 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
-	<title>How to Store Form data in CSV File using PHP</title>
-  <title>Bootstrap Tags Input</title>
-    <meta name="robots" content="index, follow" />
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+ <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>home</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="YourExternalJQueryScripts.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-jcreate@1/dist/jquery.jcreate.min.js"></script>
 <link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
+<script src="YourExternalJQueryScripts.js"></script>
+<style>
+/*
+#productbuttonspanel{
+	background-image: url("shelf1.jpg");
+	background-repeat: repeat-y;
+	background-size: contain;
+	overflow: auto;
+	background-attachment: local;
+}
+*/
+#optionsbuttonsbackground{
+	background-image: url("optionsbuttonsbackground.png");
+	
+}
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"></link>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap-theme.min.css"></link>
-    <link rel="stylesheet" href="bootstrap-tagsinput.css"></link>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
-    <script src="bootstrap-tagsinput.min.js"></script>
-    <script src="bootstrap-tagsinput-angular.min.js"></script>
-  
-     <link rel="stylesheet" href="app.css"></link>
-     
-    
-    
-</head>
+
+</style>
+	</head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col">
-            	<input type="text" value="Amsterdam,Washington,Sydney,Beijing,Cairo" data-role="tagsinput" />
-            </div>
-          </div>
-        <div class="row">
-          	<div class="col">
-          <input type="text" id="ghghgh" value="Amsterdam,Washington" data-role="tagsinput" />
-			</div>          
-          </div>
+
+  <div class="container-fluid h-100" ng-app="appmodule" ng-controller="appcontroller">
+  <!-- Bill columns and button columns row -->
+  <div class="row"   style="height:80%">
+  		<!-- Bill columns -->
+		<div class="col-4" >
+			<!-- Billing Table  -->
+			<div class="row" style="background-color: white;height: 80%;">
+				<div class="table-responsive">
+				<form id="billingitemsform">
+					<table class="table" id="billingtable" >
+					<tr ng-click="modelfunction()">
+						<th>Sl.no.</th>
+						<th>Product</th>
+						<th>Units</th>
+						<th>Weight</th>
+						<th>Cost Price</th>
+						<th>Tax</th>
+						<th style="display: none;">Tax</th>
+					</tr>
+					</table>
+					</form>
+				</div>
+			</div>
+			<!-- Total Price and Taxes row -->
+			<div class="row" style="background-color: white;border-style:outset;border-width:5px;height: 15%;position: relative;">
+					<label style="position: absolute;left:0;top: 10%;" for="totalvalue" class="text-info font-weight-bold">Total Price:</label>
+					<span style="position: absolute;left:20%;top: 10%;width: 10%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totalcostprice"></span><br></br><br></br>
+					<label style="position: absolute;left:0;top: 40%;" for="totalvalue" class="text-info font-weight-bold">Total Tax:</label>
+					<span style="position: absolute;left:20%;top: 40%;width: 10%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totaltax"></span>
+				<h2>
+				<label style="position: absolute;right:30%;top: 30%;" for="totalvalue" class="text-info font-weight-bold">TOTAL:</label>
+				<span style="position: absolute;right:20%;width: 10%;top: 30%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totalcostprice+totaltax"></span>
+				</h2>
+			</div>
+			<div class="row" style="background-color: silver;height: 5%;"></div>
+		</div>
+		<!-- The buttons panel column -->
+		<div id="productbuttonspanel" class="col-8"  style="background-color: white;">
+			<!-- Row with the category names -->
+			<div  id="categorybuttonsdiv" style="height: 20%;white-space:nowrap;background-color: aqua;white-space: nowrap;overflow-x: auto; ">
+						<span class="text-primary" style="height: 50%;">Categories</span>
+						<Button ng-click="populateProductsOfCategory(x)" class="btn btn-primary mx-1 my-1"  ng-repeat="x in categories" ng-bind="x.name" style="height:50%;white-space:nowrap;"></Button>
+			</div>
+			<!-- Row with the product details -->
+			<div class="row" style="height: 80%;background-color: yellow;">
+						<span class="text-primary" style="height: 100%;">Products</span>
+						<Button  class="btn btn-primary mx-1" ng-click="addProductsToBill(x)"  ng-repeat="x in products" ng-bind="x.name" style="height:20%;white-space:nowrap;"></Button>
+						<span ng-if="products==undefined">Please Click on the different categories to get started</span>
+			</div>
+			
+		</div>
+	</div>
+	<!-- The bottom row that holds the options buttons -->
+	<div class="row" style="height: 20%;align-items: center;">
+		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;color: white;width:10%;height:80%;text-align: cen" onclick="toggleFullScreen(document.documentElement)">TOGGLE FULLSCREEN</a>
+		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width:10%;height:80%" href="home">HOME</a>
+		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width:10%;height:80%" href="app-logout">LOGOUT</a>
+		<a class="btn-sm btn-primary btn-block disabled mx-2" id="undobutton" style="text-decoration: none;color: black;width:10%;height:80%" ng-click="disableBtn||undo()">UNDO</a>
+		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:10%;height:80%" data-toggle="modal" data-target="#paymenttypemodal" href="#">PAY</a>
+		<div class="btn-block" style="width: 10%">
+			<a class="btn-sm btn-primary disabled" ng-click="decreasefn()" style="text-decoration: none;width: 20%;display: inline-block;text-align: center;" >-</a><span style="width: 60%;display: inline-block;text-align: center;">BUTTONS</span><a class="btn-sm btn-primary" ng-click="increasefn()" style="text-decoration: none;width: 20%;display: inline-block;text-align: center;">+</a>
+		</div>
+		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width: 10%;height: 80%;" ng-click="removeallrows()" href="">CLEAR ALL</a>
+	</div>
+   
+  </div>
+  <!-- The Adjust Inventory and Weight Modal -->
+  <div class="modal fade" id="adjustProductDetail">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Adjust Quantity and Weight</h4>
+          <button type="button" class="close addCategoryCloseButton" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="formgroup">
+				<label class="font-weight-bold" for="quantity">Quantity</label>
+				<input class="form-control form-control-sm"  ng-model="unitsofclicked" type="text" id="quantity" name="qty"></input>
+				
+			</div>
+				
+			<div class="formgroup">
+				<label class="font-weight-bold" for="weight">Weight</label>
+				<input class="form-control form-control-sm"  ng-model="weightofclicked"  type="text" id="weight" name="wt"></input>
+			</div>
+                       
+            <label id="addCategorySuccessMessage" value="waiting" class="text-success" ></label>
+            <span th:text="${ErrorName}"></span>
+        </div>
+        
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button ng-click="adjustQtyAndWeightButtonClicked()" class="btn btn-primary btn-sm btn-block " data-dismiss="modal">Adjust Qty and Weight</button>
+        </div>
+        
+      </div>
+    
+  </div>
+  </div>
+   <!-- The Payment type Modal -->
+  <div class="modal fade" id="paymenttypemodal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Select Payment Type</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        
+        <!-- Modal body -->
+        <div style="align-self: center;" class="modal-body">
+        	<button onclick="onClickPaymentButton()" class="btn btn-info">DEBIT</button>
+        	<button onclick="onClickPaymentButton()" class="btn btn-info">CREDIT</button>
+        	<button onclick="onClickPaymentButton()" class="btn btn-info">CASH</button>
+        </div>
+        
+      	<div class="modal-footer">
+      		<span id="billsavemessage" ></span>
+      	</div>
+        
+      </div>
     </div>
-<script>
-var citynames = new Bloodhound({
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  prefetch: {
-    url: 'citynames.json',
-    filter: function(list) {
-      return $.map(list, function(cityname) {
-        return { name: cityname }; });
-    }
-  }
-});
-citynames.initialize();
+  </div>
+  
+  
+  <script>
+  //<![CDATA[
+  var app = angular.module("appmodule",[]);
+  app.controller("appcontroller",function($http,$scope,$compile){
+	  $scope.totalcostprice = 0.0;
+	  $scope.totaltax = 0.0;
+	  $scope.tablecount = 0;
+	  $scope.number = 1;
+	  $scope.disableBtn = true;
+	  $scope.unitsofclicked = 0;
+	  $scope.weightofclicked = 0;
+	  $scope.updatepriceandtex = function(){
+		  	$scope.totalcostprice  = 0.0;
+		  	$scope.totaltax = 0.0;
+		    for(var i=0;i<($scope.tablecount);i++){
+		    	 $scope.totalcostprice  =  $scope.totalcostprice +parseFloat($("#billingtable tr").eq(i+1).children().eq(4).text());
+		    	 $scope.totaltax  =  $scope.totaltax +parseFloat($("#billingtable tr").eq(i+1).children().eq(5).text());
+			  }
+	  }
+		
+	 
+	  $scope.width = 90/$scope.number+'%';
+	  $scope.getNumber = function(num) {
+	      return new Array(num);   
+	  }
+	 $http.get("category").then(function(response){
+		 $scope.categories = response.data;
+	 }) ;
+	 $scope.decreasefn = function(){
+		console.log("Entered");
+		$scope.number = (($scope.number-1) > 1) ? $scope.number-1 : 1;
+		$scope.width = 90/$scope.number+'%';
+		console.log($scope);
+	 };
+	 $scope.increasefn = function(){
+		 $scope.number = $scope.number+1;
+		 $scope.width = 80/$scope.number+'%';
+	 }
+	 
+	 //The angularjs function to populate the products upon clicking category button.
+	 $scope.populateProductsOfCategory = function(x){
+		 $http.get("/products/categoryid/"+x.category_id).then(function(response){
+			 $scope.products = response.data;
+		 }) ;
+	 }
+	 //The angularjs function to add the clicked product onto the Bill
+	 $scope.addProductsToBill = function(x){
+		 $scope.tablecount = $scope.tablecount+1;
+		 var $el = $("#billingtable").append('<tr ng-click="modelfunction('+$scope.tablecount+')">'+
+					'<td>'+$scope.tablecount+'</td>'+
+					'<td>'+x.name+'</td>'+
+					'<td>'+1+'</td>'+
+					'<td>'+0.00+'</td>'+
+					'<td>'+x.costPrice+'</td>'+
+					'<td>'+x.taxvalue+'</td>'+
+					'<td style="display: none;">'+x.product_id+'</td>'+
+				'</tr>');
+		 $compile($el)($scope);
+		 $scope.updatepriceandtex();
+		 $scope.disableBtn = false;
+		 $('#undobutton').removeClass('disabled');
+		 $('#undobutton').css("color", "white");
+	 }
+	 $scope.displaySelectedCategory = function(x){
+		 console.log("entered click");
+		 //This is for hadling clicks of category buttons.If a category button is clicked 
+		 //then the corresponsing products would be populated. 
+		 if(x.category_id != undefined){
+			 console.log('categoryid of the clicked category is'+x.category_id);
+			 $http.get("/products/categoryid/"+x.category_id).then(function(response){
+				 $scope.categories = response.data;
+			 }) ;
+		 }
+		 //If a product button is clicked populate the table with the details
+		 else{
+			 $scope.tablecount = $scope.tablecount+1;
+			 var $el = $("#billingtable").append('<tr ng-click="modelfunction('+$scope.tablecount+')">'+
+						'<td>'+$scope.tablecount+'</td>'+
+						'<td>'+x.name+'</td>'+
+						'<td>'+1+'</td>'+
+						'<td>'+0.00+'</td>'+
+						'<td>'+x.costPrice+'</td>'+
+						'<td>'+x.taxvalue+'</td>'+
+						'<td style="display: none;">'+x.product_id+'</td>'+
+					'</tr>');
+			 $compile($el)($scope);
+			 $scope.updatepriceandtex();
+			 $scope.disableBtn = false;
+			 $('#undobutton').removeClass('disabled');
+			 $('#undobutton').css("color", "white");
+		 }
+	 }
+	 $scope.undo = function(){
+		 $("#billingtable tr:last").remove();
+		 $scope.tablecount--;
+		 $scope.updatepriceandtex();
+		 
+		 console.log('tablecount='+$scope.tablecount);
+		 if($scope.tablecount == 0){
+			 $scope.disableBtn = true;
+			 $('#undobutton').addClass('disabled');
+			 $('#undobutton').css("color", "black");
+		 }
+	 }
+	 $scope.modelfunction = function(tc){
+		 $scope.unitsofclicked = parseFloat($('#billingtable tr').eq(tc).children().eq(2).text());
+		 $scope.weightofclicked = parseFloat($('#billingtable tr').eq(tc).children().eq(3).text());
+		 $scope.clickedbutton = tc;
+		 $('#adjustProductDetail').modal('show');
+		 console.log("okayyy modelfunction"+tc);
+	 }
+	 $scope.adjustQtyAndWeightButtonClicked = function(){
+		 console.log('entered');
+		 $("#billingtable tr").eq($scope.clickedbutton).children().eq(2).text($scope.unitsofclicked);
+		 $("#billingtable tr").eq($scope.clickedbutton).children().eq(3).text($scope.weightofclicked);
+		 var cp = parseFloat($('#billingtable tr').eq($scope.clickedbutton).children().eq(4).text());
+		 var tax = parseFloat($('#billingtable tr').eq($scope.clickedbutton).children().eq(5).text());
+		 cp = $scope.unitsofclicked*cp+$scope.weightofclicked*cp;
+		 tax = $scope.unitsofclicked*tax+$scope.weightofclicked*tax;
+		 
+		 $('#billingtable tr').eq($scope.clickedbutton).children().eq(4).text(cp);
+		 $('#billingtable tr').eq($scope.clickedbutton).children().eq(5).text(tax);
+		 $scope.updatepriceandtex();
+	 }
+	 $scope.removeallrows = function (){
+		  $("#billingtable tr:not(:first)").remove();
+		  $scope.totalcostprice = 0.0;
+		  $scope.totaltax = 0.0;
+		  $scope.tablecount = 0;
+	  }
+  });
+  function onClickPaymentButton(){
+	  var d = "";
+	  console.log("payemnt clicked");
+	  $("#billingtable tr:not(:first)").each(function(index){
+		 if(index!=0){
+			 d = d+"&";
+		 }
+		 d = d+"productid="+($(this).children().eq(6).text())+"&";
+		 d = d+"units="+($(this).children().eq(2).text())+"&";
+		 d = d+"weight="+($(this).children().eq(3).text())+"&";
+		 d = d+"costprice="+($(this).children().eq(4).text())+"&";
+		 d = d+"tax="+($(this).children().eq(5).text());
+	  });
+	  d = d+"&totalcostprice="+angular.element(document.querySelector('[ng-controller="appcontroller"]')).scope().totalcostprice;
+	  d = d+"&totaltax="+angular.element(document.querySelector('[ng-controller="appcontroller"]')).scope().totaltax;
+	  console.log("data="+d);
+	  $.ajax({
+	        type: "POST",
+	        url: "/posbilling",
+	        data: d,
+	        cache: false,
+	        timeout: 600000,
+	        success: function (data) {
+	        	$("#billsavemessage").text(data);
+	        	$("#billsavemessage").addClass("text-success");
+	            console.log("SUCCESS : ", data);
+	           
+	        },
+	        error: function (e) {
+	        	
+	            console.log("ERROR : ", e);
+	            
 
-$('#ghghgh').tagsinput({
-  typeaheadjs: {
-    name: 'citynames',
-    displayKey: 'name',
-    valueKey: 'name',
-    source: citynames.ttAdapter()
+	        }
+	    });
   }
-});
-</script>
-
+  
+	
+ // ]]>
+  </script>
 </body>
 </html>

@@ -43,4 +43,7 @@ public class ProductService {
 		// TODO Auto-generated method stub
 		productRepository.delete(id);
 	}
+	public Product findByupccode(long upcCode) {
+		return productRepository.findByupccode(upcCode);
+	}
 }

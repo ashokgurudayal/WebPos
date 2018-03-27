@@ -318,11 +318,13 @@
 			<div class="formgroup">
 				<label class="font-weight-bold" for="upccode">Upccode</label>
 				<input class="form-control form-control-sm " th:field="*{upccode}" type="text"></input>
+				<Button class="btn btn-primary" id="searchupcbutton">Search UPC</Button>
+				<span id="searchupcresponse"></span>
 				<span class="error text-danger" th:errors="*{upccode}"></span>
 			</div>
 			<div class="formgroup">
 				<label class="font-weight-bold" for="name">Name</label>
-				<input class="form-control form-control-sm " th:field="*{name}" type="text"></input>
+				<input class="form-control form-control-sm " id="productname" th:field="*{name}" type="text"></input>
 				<span class="error text-danger" th:errors="*{name}"></span>
 			</div>
 			<div class="formgroup">
@@ -393,7 +395,9 @@
 			</div>
 			<div class="formgroup">
 				<label class="font-weight-bold" th:for="image">Upload Image</label> 
-				<input th:field="*{productImage}" th:type="file" onchange="readURL(this);"></input>
+				  <input th:field="*{productImage}" th:type="file" onchange="readURL(this);"></input>
+				<!-- <input type="image" name="productImage" class="img-fluid rounded" src="arrow-upload-icon.png"></input>-->
+				<!-- <img th:field="*{productImage}" class="img-fluid rounded" src="arrow-upload-icon.png"></img>-->
 				<span class="error text-danger" th:errors="*{productImage}"></span>
 			</div>
 			<div class="formgroup">
@@ -575,7 +579,7 @@
 			</div>
 			<div class="formgroup">
 				<label class="font-weight-bold" for="description">Description</label>
-				<textarea class="form-control form-control-sm" name="supplier_description" id="categorydescriptionnn" rows="4" cols="50" ></textarea>
+				<textarea class="form-control form-control-sm" name="description" id="categorydescriptionnn" rows="4" cols="50" ></textarea>
 				<label id="categorydescriptionerror" class="text-danger"></label>
 			</div>
 			<div class="formgroup">
@@ -704,6 +708,7 @@
   
   </div>
   <script>
+//<![CDATA[
 		var app = angular.module('drpdwnApp', []);
 		
 		app.controller('drpdwnCtrl', function($scope, $http) {
@@ -713,10 +718,35 @@
    			$http.get("attributes").then(function (response) {
    				$scope.attributesNames = response.data;
    			});
-   			console.log("okay added scope.categoryNames");
-   			console.log($scope);
+   			
+   			$scope.fire_ajax_submit_upccode = function(x) {
+   				$http.get("https://cors-anywhere.herokuapp.com/https://api.upcitemdb.com/prod/trial/lookup?upc="+x).
+   				then(function successCallback(response) {
+   				    // this callback will be called asynchronously
+   				    // when the response is available
+   				    $scope.names = response.data;
+   					$("#productname").val($scope.names.items[0].title);
+						$("#description").text($scope.names.items[0].description);
+        			$("#prodimage").attr("src",$scope.names.items[0].images[0]);
+        			$("#searchupcresponse").text("details found and updated");
+        			$("#searchupcresponse").addClass("text-success");
+   				  }, function errorCallback(response) {
+   				    // called asynchronously if an error occurs
+   				    // or server returns response with an error status.
+   					$("#searchupcresponse").text("sorry details not found");
+        			$("#searchupcresponse").addClass("text-danger");
+   				});
+   			}
+   			
+		});
+		$('#searchupcbutton').click(function(event){
+			event.preventDefault();
+			console.log("Button clicked");
+			angular.element(document.querySelector('[ng-controller="drpdwnCtrl"]')).scope().fire_ajax_submit_upccode($('#upccode').val());
 		});
 		
+		
+		// ]]>
 </script>
 </body>
 </html>

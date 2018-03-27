@@ -100,8 +100,7 @@ public class Orders {
 	public void setTotal_tax(double total_tax) {
 		this.total_tax = total_tax;
 	}
-	@JsonSerialize(using = DateSerializer.class)
-	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="EST")
+	@JsonSerialize(using = DateSerializerr.class)
 	public Date getCreatets() {
 		return createts;
 	}

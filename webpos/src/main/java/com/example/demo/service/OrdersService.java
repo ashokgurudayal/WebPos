@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,9 @@ public class OrdersService {
 		// TODO Auto-generated method stub
 		if(ordersRepository.findOne(orders.getOrderId())==null)
 			ordersRepository.save(orders);
+	}
+	public List<Orders> findByCreatetsBetween(Date startDate,Date endDate){
+		return ordersRepository.findByCreatetsBetween(startDate,endDate);
 	}
 	
 	

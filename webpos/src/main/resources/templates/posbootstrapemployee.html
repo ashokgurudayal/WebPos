@@ -14,7 +14,6 @@
 <link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
 <script src="YourExternalJQueryScripts.js"></script>
 <style>
-/*
 #productbuttonspanel{
 	background-image: url("shelf1.jpg");
 	background-repeat: repeat-y;
@@ -22,43 +21,19 @@
 	overflow: auto;
 	background-attachment: local;
 }
-*/
-.activeCategoryClass{
-	background-color: green;
-}
-.activeCategoryClass:hover{
-	background-color: green;
-}
 #optionsbuttonsbackground{
 	background-image: url("optionsbuttonsbackground.png");
-}
-#productbuttonsdiv{
-	background: url('yellow2.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-#categorybuttonsdiv{
-	background: url('green1.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-#barcodemodediv{
-	background: url('green1.jpg');
-	background-repeat: no-repeat;
-	background-size: cover;
+	
 }
 </style>
 	</head>
 <body>
 
-  <div class="container-fluid h-100" ng-app="appmodule" ng-controller="appcontroller">
-  <!-- Bill columns and button columns row -->
-  <div class="row"   style="height:80%">
-  		<!-- Bill columns -->
-		<div id="billingrow"  class="col-4" >
-			<!-- Billing Table  -->
+  <div class="container-fluid h-100">
+  <div class="row" ng-app="appmodule" ng-controller="appcontroller"  style="height:100%">
+		<div class="col-6" >
 			<div class="row" style="background-color: white;height: 80%;">
-				<div id="billingcolumn" class="table-responsive">
+				<div class="table-responsive">
 				<form id="billingitemsform">
 					<table class="table" id="billingtable" >
 					<tr ng-click="modelfunction()">
@@ -74,56 +49,39 @@
 					</form>
 				</div>
 			</div>
-			<!-- Total Price and Taxes row -->
-			<div class="row" id="billingcolumnbottom" style="background: white;border-style:outset;border-width:5px;height: 15%;position: relative;">
+			<div class="row" style="background-color: white;border-style:outset;border-width:5px;height: 15%;position: relative;">
 					<label style="position: absolute;left:0;top: 10%;" for="totalvalue" class="text-info font-weight-bold">Total Price:</label>
-					<span style="position: absolute;left:20%;top: 10%;width: 10%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totalcostprice"></span><br></br><br></br>
-					<label style="position: absolute;left:0;top: 40%;" for="totalvalue" class="text-info font-weight-bold">Total Tax:</label>
-					<span style="position: absolute;left:20%;top: 40%;width: 10%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totaltax"></span>
+					<span style="position: absolute;left:15%;top: 10%;width: 10%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totalcostprice"></span>
+					<label style="position: absolute;left:0;top: 30%;" for="totalvalue" class="text-info font-weight-bold">Total Tax:</label>
+					<span style="position: absolute;left:15%;top: 30%;width: 10%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totaltax"></span>
 				<h2>
-				<label style="position: absolute;right:30%;top: 30%;" for="totalvalue" class="text-info font-weight-bold">TOTAL:</label>
+				<label style="position: absolute;right:40%;top: 30%;" for="totalvalue" class="text-info font-weight-bold">TOTAL</label>
 				<span style="position: absolute;right:20%;width: 10%;top: 30%;" id="totalvalue" class="font-weight-bold text-info" ng-bind="totalcostprice+totaltax"></span>
 				</h2>
 			</div>
 			<div class="row" style="background-color: silver;height: 5%;"></div>
 		</div>
-		<!-- The buttons panel column -->
-		<div id="productbuttonspanel" class="col-8"  style="background-color: white;">
-			<!-- Row with the category names -->
-			<div class="px-5"  id="categorybuttonsdiv" style="height: 20%;margin-right: -15px;margin-left: -15px;white-space:nowrap;background-color: aqua;white-space: nowrap;overflow-x: auto; ">
-						<span class="text-primary font-weight-bold" style="position:fixed">CATEGORIES</span><br></br>
-						<Button ng-click="populateProductsOfCategory(x)" class="btn btn-primary mx-1 my-1"  ng-repeat="x in categories" ng-bind="x.name" style="height:50%;white-space:nowrap;"></Button>
+		<div class="col-2" id="optionsbuttonsbackground">
+			<a class="btn-sm btn-primary btn-block" style="text-decoration: none;color: white;" onclick="toggleFullScreen(document.documentElement)">TOGGLE FULLSCREEN</a>
+			<a class="btn-sm btn-primary btn-block" style="text-decoration: none;" href="app-logout">LOGOUT</a>
+			<a class="btn-sm btn-primary btn-block disabled" id="undobutton" style="text-decoration: none;color: black;" ng-click="disableBtn||undo()">UNDO</a>
+			<a class="btn-sm btn-primary btn-block"  style="text-decoration: none" data-toggle="modal" data-target="#paymenttypemodal" href="#">PAY</a>
+			<a class="btn-sm btn-primary btn-block" style="text-decoration: none;" href="posbootstrapnewformatemployee">SWITCH VIEW</a>
+			<div class="btn-block" >
+				<a class="btn-sm btn-primary disabled" ng-click="decreasefn()" style="text-decoration: none;width: 20%;display: inline-block;text-align: center;" >-</a><span style="width: 60%;display: inline-block;text-align: center;">BUTTONS</span><a class="btn-sm btn-primary" ng-click="increasefn()" style="text-decoration: none;width: 20%;display: inline-block;text-align: center;">+</a>
 			</div>
-			<!-- Row with the product details -->
-			<div class="px-5" id="productbuttonsdiv" style="height: 80%;margin-right: -15px;margin-left: -15px;">
-						<span class="text-primary mb-10 font-weight-bold" style="position:fixed">PRODUCTS</span><br></br>
-						<Button  class="btn btn-primary mx-1" ng-click="addProductsToBill(x)"  ng-repeat="x in products" ng-bind="x.name" style="height:20%;"></Button>
-						<span ng-if="products==undefined" class="text-info font-weight-bold"><br></br>Please select a category to get started</span>
-						<span ng-if="products.length==0" class="text-info font-weight-bold"><br></br>No Products in the selected category</span>
-			</div>
-			<div class="px-5" id="barcodemodediv" style="height: 100%;margin-right: -15px;margin-left: -15px;display:none;">
-				<span class="text-info">Use a Barcode Scanner or enter the Upccode and press the button</span>
-				<br></br>
-				<input class="form-control form-control-sm col-6" id="upccode"  type="text"></input>
-				<button ng-click="getProductOfUpccode()" class="btn btn-primary" id="addwithupccode">ADD</button>
+			<a class="btn-sm btn-primary btn-block" style="text-decoration: none;" ng-click="removeallrows()" href="">CLEAR ALL</a>
+		</div>
+		<div id="productbuttonspanel" class="col-4"  style="background-color: white;">
+			<div class="col-11 mx-auto" style="height: 100%;float: none;">
+					<div  ng-repeat="x in categories" >
+						<div class="mt-5" ng-if="$index%number==0">
+								<Button ng-click="displaySelectedCategory(categories[$parent.$index+$index])" title="{{categories[$parent.$index+$index].name}}"  ng-style="{ 'width' : width}" style="overflow: hidden;"  ng-repeat="i in getNumber(number) track by $index" class="btn btn-primary mr-2 my-1 " href="" ng-show="categories[$parent.$index+$index].name!=null" ng-bind="categories[$parent.$index+$index].name"></Button>
+						</div>
+					</div>
 			</div>
 		</div>
-	</div>
-	<!-- The bottom row that holds the options buttons -->
-	<div class="row" id="bottomButtonsPanel" style="height: 20%;align-items: center;">
-		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;color: white;width:9%;height:80%;text-align: cen" onclick="toggleFullScreen(document.documentElement)">TOGGLE FULLSCREEN</a>
-		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width:9%;height:80%" href="home">HOME</a>
-		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" href="app-logout">LOGOUT</a>
-		<a class="btn-sm btn-primary btn-block disabled mx-2" id="undobutton" style="text-decoration: none;color: black;width:9%;height:80%" ng-click="disableBtn||undo()">UNDO</a>
-		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" data-toggle="modal" data-target="#paymenttypemodal" href="#">PAY</a>
-		<a class="btn-sm btn-primary btn-block mx-2"  style="text-decoration: none;width:9%;height:80%" href="pos" >SWITCH VIEW</a>
-		<a class="btn-sm btn-primary btn-block mx-2" id="barcodemode"  style="text-decoration: none;width:9%;height:80%" href="#" >BARCODE MODE</a>
-		<a class="btn-sm btn-primary btn-block mx-2" style="text-decoration: none;width: 9%;height: 80%;" ng-click="removeallrows()" href="">CLEAR ALL</a>
-		<a class="btn-sm btn-primary btn-block mx-2" id="viewSwitch" style="text-decoration: none;width: 9%;height: 80%;" href="">POWER SAVING MODE</a>
-	</div>
-   
-  
-  <!-- The Adjust Inventory and Weight Modal -->
+   <!-- The Adjust Inventory and Weight Modal -->
   <div class="modal fade" id="adjustProductDetail">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -157,9 +115,9 @@
         </div>
         
       </div>
-    
+    </div>
   </div>
-  </div>
+  
    <!-- The Payment type Modal -->
   <div class="modal fade" id="paymenttypemodal">
     <div class="modal-dialog">
@@ -184,6 +142,8 @@
         
       </div>
     </div>
+  </div>
+  
   </div>
   </div>
   
@@ -225,52 +185,6 @@
 		 $scope.number = $scope.number+1;
 		 $scope.width = 80/$scope.number+'%';
 	 }
-	//The angularjs function to get the products upon clicking Add button in Barcode mode.
-	 $scope.getProductOfUpccode = function(){
-		 $http.get("/products/upccode/"+$('#upccode').val()).then(function(response){
-			 $scope.addProductsToBill(response.data);
-			
-		 }) ;
-		
-		 
-	 }
-	 //The angularjs function to populate the products upon clicking category button.
-	 $scope.populateProductsOfCategory = function(x){
-		 $('button').removeClass('btn-primary').addClass('btn-secondary');
-		 $('#categorybuttonsdiv Button').removeClass('activeCategoryClass');
-		 if($('#viewSwitch').text()!=('POWER SAVING MODE ON')){
-		 	$('#categorybuttonsdiv Button').eq(this.$index).addClass('activeCategoryClass');
-		 }
-		 $http.get("/products/categoryid/"+x.category_id).then(function(response){
-			 $scope.products = response.data;
-			
-		 }) ;
-		
-		 
-	 }
-	 //The angularjs function to add the clicked product onto the Bill
-	 $scope.addProductsToBill = function(x){
-		 $('#productbuttonsdiv Button').removeClass('activeCategoryClass');
-		 if($('#viewSwitch').text()!=('POWER SAVING MODE ON')){
-		 	$('#productbuttonsdiv Button').eq(this.$index).addClass('activeCategoryClass');
-		 }
-		 $scope.tablecount = $scope.tablecount+1;
-		 var $el = $("#billingtable").append('<tr ng-click="modelfunction('+$scope.tablecount+')">'+
-					'<td>'+$scope.tablecount+'</td>'+
-					'<td>'+x.name+'</td>'+
-					'<td>'+1+'</td>'+
-					'<td>'+0.00+'</td>'+
-					'<td>'+x.costPrice+'</td>'+
-					'<td>'+x.taxvalue+'</td>'+
-					'<td style="display: none;">'+x.product_id+'</td>'+
-				'</tr>');
-		 $compile($el)($scope);
-		 $scope.updatepriceandtex();
-		 $scope.disableBtn = false;
-		 $('#undobutton').removeClass('disabled');
-		 $('#undobutton').css("color", "white");
-		
-	 }
 	 $scope.displaySelectedCategory = function(x){
 		 console.log("entered click");
 		 //This is for hadling clicks of category buttons.If a category button is clicked 
@@ -280,7 +194,6 @@
 			 $http.get("/products/categoryid/"+x.category_id).then(function(response){
 				 $scope.categories = response.data;
 			 }) ;
-			 
 		 }
 		 //If a product button is clicked populate the table with the details
 		 else{
@@ -313,14 +226,12 @@
 			 $('#undobutton').css("color", "black");
 		 }
 	 }
-	 //This function is invoked when a billing table row is clicked
 	 $scope.modelfunction = function(tc){
 		 $scope.unitsofclicked = parseFloat($('#billingtable tr').eq(tc).children().eq(2).text());
 		 $scope.weightofclicked = parseFloat($('#billingtable tr').eq(tc).children().eq(3).text());
 		 $scope.clickedbutton = tc;
 		 $('#adjustProductDetail').modal('show');
 		 console.log("okayyy modelfunction"+tc);
-		 
 	 }
 	 $scope.adjustQtyAndWeightButtonClicked = function(){
 		 console.log('entered');
@@ -341,50 +252,6 @@
 		  $scope.totaltax = 0.0;
 		  $scope.tablecount = 0;
 	  }
-  });
-  
-  $("#barcodemode").click(function(){
-	 if(!$("#barcodemode").hasClass('active')){
-		 $("#barcodemodediv").show();
-		 $("#categorybuttonsdiv").hide();
-		 $("#productbuttonsdiv").hide();
-		 $("#barcodemode").addClass('active');
-		 $('#productbuttonspanel').removeClass('col-8').addClass('col-4');
-		 $('#billingrow').removeClass('col-4').addClass('col-8');
-	 }
-	 else{
-		 $("#barcodemodediv").hide();
-		 $("#categorybuttonsdiv").show();
-		 $("#productbuttonsdiv").show();
-		 $("#barcodemode").removeClass('active');
-		 $('#productbuttonspanel').removeClass('col-4').addClass('col-8');
-		 $('#billingrow').removeClass('col-8').addClass('col-4');
-	 }
-	 
-  });
-  $('#viewSwitch').click(function(){
-	  if($('#viewSwitch').text() == 'POWER SAVING MODE ON'){
-		  window.location.href="http://localhost:8090/posbootstrapnewformat";
-	  }
-	 $('a').removeClass('btn-primary'); 
-	 $('a').addClass('btn-secondary'); 
-	 $('button').removeClass('btn-primary activeCategoryClass').addClass('btn-secondary');
-	 $('#bottomButtonsPanel,#billingcolumn').css('background','black');
-	 $('#bottomButtonsPanel,#billingcolumn').css('border-color','white');
-	 $('#bottomButtonsPanel,#billingcolumn').css('border-style','solid');
-	 $('#bottomButtonsPanel').css('border-width','medium');
-	 $('#billingcolumn').css('border-width','thin');
-	 $('#bottomButtonsPanel div').css('color','white');
-	 $('#productbuttonsdiv').css('background','black');
-	 $('#productbuttonsdiv span').removeClass('text-info text-primary');
-	 $('#productbuttonsdiv span').addClass('text-light');
-	 $('#categorybuttonsdiv').css('background','black');
-	 $('#categorybuttonsdiv span').removeClass('text-info text-primary');
-	 $('#categorybuttonsdiv span').addClass('text-light');
-	 $('#billingcolumnbottom').css('background','black');
-	 $('#billingcolumnbottom span,#billingcolumnbottom label').removeClass('text-info').addClass('text-light');
-	 $('#billingtable').css('color','white');
-	 $('#viewSwitch').text('POWER SAVING MODE ON').addClass('font-weight-bold');
   });
   function onClickPaymentButton(){
 	  var d = "";

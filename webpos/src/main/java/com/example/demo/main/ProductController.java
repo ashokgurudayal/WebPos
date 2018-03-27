@@ -145,7 +145,11 @@ public class ProductController {
 	public List<Product> getProductsOfCategory(@PathVariable Long id) {
 		return productService.findByCategoryId(categoryService.getCategory(id));
 	}
-	
+	@RequestMapping(value="/products/upccode/{upccode}")
+	@ResponseBody
+	public Product getProductOfUpccode(@PathVariable Long upccode) {
+		return productService.findByupccode(upccode);
+	}
 	@RequestMapping(value = "/products/{id}",method=RequestMethod.PUT)
 	@ResponseBody
 	public void updateTopic(@RequestBody Product product,@PathVariable Long id) {

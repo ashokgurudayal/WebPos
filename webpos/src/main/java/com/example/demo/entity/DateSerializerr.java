@@ -12,15 +12,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class DateSerializer extends JsonSerializer<Date> {
+import org.assertj.core.util.DateUtil;
+import org.thymeleaf.util.DateUtils;
 
-    final static DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+public class DateSerializerr extends JsonSerializer<Date> {
+
+    final static DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
     static {
         df.setTimeZone(TimeZone.getTimeZone("EST"));
     }
 
     @Override
     public void serialize(Date value, JsonGenerator gen, SerializerProvider serializers) throws IOException, JsonProcessingException {
-        gen.writeString(df.format(value));
+        long l = value.getTime()+3600*1000;
+    	gen.writeString(df.format(l));
     }
 }

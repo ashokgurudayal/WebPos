@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+ <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>home</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script type = "text/javascript" src = "https://www.gstatic.com/charts/loader.js">
+      </script>
+      <script type = "text/javascript">
+         google.charts.load('current', {packages: ['corechart']});     
+      </script>
+	</head>
+<body>
+
+  <div class="container-fluid h-100" ng-app="myapp" ng-controller="myctrl">
+  <div class="row" style="height:10%">
+	<header  class="col" data-include="headerportion"></header>
+   </div>
+   <div class="row" style="height:80%">
+	<aside  class="col-sm-2" data-include="leftsidebar"></aside>
+	<main   class="col-sm-10">
+		<input type="radio"  ng-model="daymodel" id="month" name="ordersbydate" ></input>
+		<label for="month" class="mr-2">Month</label>
+		
+		<input type="radio" id="year"  name="ordersbydate" ></input>
+		<label for="year" class="mr-2">Year</label>
+		<input type="radio" id="daterange"  name="ordersbydate" ></input>
+		<label for="daterange" class="mr-2">Date Range</label>
+		<br></br>
+		<div id="monthdiv" style="display: none;">
+			<select id="monthselecttag" ng-model="myselection" ng-options="x for x in monthNames">
+				<option disabled="disabled" label="select a value"></option>
+			</select>
+		</div>
+		<div id="daterangediv" style="display: none;">
+			<label>Start Date</label>
+			<input type="text" id="startdatepicker" ></input>
+			<label>End Date</label>
+			<input type="text" id="enddatepicker" ></input>
+			<br></br><br></br>
+		</div>
+		<span id="noorders" class="text-primary" style="display: none;">No Orders to display</span>
+		<div id = "graphid" style = "width: 90%; height: 400px; margin: 0 auto">
+      </div>
+	</main>
+	</div>
+	<div class="row" style="height:10%">
+	<footer class="col"  data-include="footerportion"></footer>
+	</div>
+  </div>
+
+   <script language = "JavaScript">
+ //<![CDATA[
+	 	app = angular.module('myapp',[]);
+	 	app.controller('myctrl',function($scope){
+	 		$scope.monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+	 	});
+         function drawChart(x) {
+            // Define the chart to be drawn.
+            
+            var data = google.visualization.arrayToDataTable(x);
+
+            var options = {title: 'Total Sales','chartArea': {'width': '80%', 'height': '80%'},'legend': {'position': 'top'},
+            animation:
+           {
+               startup: true,
+               duration: 2000,
+               easing: 'out'
+           }
+                
+            }; 
+
+            // Instantiate and draw the chart.
+            var chart = new google.visualization.ColumnChart(document.getElementById('graphid'));
+            chart.draw(data, options);
+         }
+         //google.charts.setOnLoadCallback(drawChart);
+         
+   		$('#month').click(function() {
+   			$('#daydiv').hide();
+   			$('#daterangediv').hide();
+   			$('#monthdiv').slideDown();
+			
+   		});
+   		$('#monthselecttag').change(function(){
+   			var x = [['Day', 'Sales']];
+            var d = {month:$("#monthselecttag").val()};
+            $.ajax({
+			    url : "getallcoordinates",
+			    type : "post",
+			    data : d,
+			    async: false,
+			    success : function(data, status){
+			    	if(data.length==0){
+			    		$('#graphid').hide();
+			    		$('#noorders').show();
+			    	}
+		            $.each(data, function(i,obj){
+		            	var y = [data[i].x,data[i].y];
+		                console.log("y vallllue:"+y);
+		                x.push(y);
+		                $('#noorders').hide();
+		                $('#graphid').show();
+		                drawChart(x)
+		            });
+		        }
+			    });
+   		});
+   		$('#daterange').click(function() {
+   			$('#daydiv').hide();
+   			$('#monthdiv').hide();
+   			$('#daterangediv').slideDown();
+   			$('#startdatepicker').datepicker();
+   			$('#startdatepicker').datepicker('setDate', 'today');
+   			$('#enddatepicker').datepicker();
+   			$('#enddatepicker').datepicker('setDate', '1');
+   		});
+      // ]]>
+      </script>
+</body>
+</html>

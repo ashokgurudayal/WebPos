@@ -126,6 +126,10 @@
                         <div class="form-group mr-0">
                             <div class="col-sm-12 ">
                                 <button type="submit" class="btn btn-primary btn-sm btn-block">Sign-in</button>
+                                <br></br>
+                                <small>
+                            	<span class="font-weight-bold-sm text-danger" style="background-color: white;align: center;" th:if = "${param.error}">Invalid Username or Password</span>
+                            	</small>
                             </div>
                         </div>
                     </form>

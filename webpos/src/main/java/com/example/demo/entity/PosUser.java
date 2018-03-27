@@ -19,6 +19,8 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 /**
  * The entity for storing the employee details who use the POS application.
@@ -30,8 +32,9 @@ public class PosUser {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private long userId;
-	@NotEmpty(message="Product name should not be blank")
+	@NotEmpty(message="First name should not be blank")
 	private String firstName;
+	@NotEmpty(message="Last name should not be blank")
 	private String lastName;
 	private char gender;
 	private String emailId;
@@ -40,9 +43,11 @@ public class PosUser {
 	private String username;
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "PosUser_Role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
+	@JsonIgnore
 	private Set<Role> roles;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "companyId")
 	private Company company;
 	

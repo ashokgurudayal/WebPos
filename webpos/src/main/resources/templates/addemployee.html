@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head>
+ <meta charset="utf-8"></meta>
+  <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+<title>home</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></link>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="YourExternalJQueryScripts.js"></script>
+<link rel="stylesheet" type="text/css" href="stylebootstrap.css"></link>
+
+	</head>
+<body>
+
+  <div class="container-fluid h-100">
+  <div class="row" style="height:10%">
+	<header  class="col" data-include="headerportion"></header>
+   </div>
+   <div class="row" style="height:80%">
+	<aside  class="col-sm-2" data-include="leftsidebar"></aside>
+	<main   class="col-sm-10" >
+		<span class="text-info" style="width:100%; text-align: center;">Please enter the details of the Employee</span>
+		<form class="offset-3 col-5" action="/addemployee" method="post" role="form" th:object="${posUser}">
+                        <div class="form-group mb-0" >
+                            <div class="col-sm-10">
+                            	<label for="firstName" class="font-weight-bold text-info">First Name</label>
+                                <input  class="form-control form-control-sm" th:field="*{firstName}" placeholder="Enter your firstname"></input>
+                                <span class="error text-danger"  th:errors="*{firstName}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <div class="col-sm-10">
+                            	<label for="lastName" class="font-weight-bold text-info">Last Name</label>
+                                <input class="form-control form-control-sm" th:field="*{lastName}"  placeholder="Enter your lastname"></input>
+                                <span class="error text-danger"  th:errors="*{lastName}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <div class="col-sm-10">
+                            	<label for="username" class=" font-weight-bold text-info">Username</label>
+                                <input class="form-control form-control-sm" th:field="*{username}"  placeholder="Enter your Username"></input>
+                                 <span class="error text-danger"  th:errors="*{username}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                        	<div class="col-sm-10">
+                        	<label class="font-weight-bold text-info">Gender</label><br></br>
+                            <label for="gender1" class="radiobutton-inline" >Male</label>
+                            <input  th:field="*{gender}" type="radio" value="M" ></input>
+                                 
+                            <label for="gender2" class="radiobutton-inline" >Female</label>
+                            <input  th:field="*{gender}" type="radio" value="F"></input>
+                            <span class="error text-danger" th:errors="*{gender}"></span>
+                             </div>
+                         </div>   
+                        
+                         <div class="form-group mb-0">
+                            <div class="col-sm-10">
+                            	<label for="emailId" class="font-weight-bold text-info">Emailid</label>
+                                <input class="form-control form-control-sm" th:field="*{emailId}"  type="email" placeholder="Enter your emailid"></input>
+                                 <span class="error text-danger" th:errors="*{emailId}"></span>
+                            </div>
+                        </div>
+                         <div class="form-group mb-0">
+                            <div class="col-sm-10">
+                            	<label for="phoneNo" class="font-weight-bold text-info">Phone No.</label>
+                                <input class="form-control form-control-sm" th:field="*{phoneNo}"  type="number" placeholder="Enter your phone no"></input>
+                                <span class="error text-danger" th:errors="*{phoneNo}"></span>
+                            </div>
+                        </div>
+                         <div class="form-group mb-0">
+                            <div class="col-sm-10">
+                            <label for="company.name" class="font-weight-bold text-info">company name</label>
+                                <input class="form-control form-control-sm" th:field="*{company.name}"  placeholder="Enter your company name"></input>
+                                 <span class="error text-danger" th:errors="*{company.name}"></span>
+                            </div>
+                        </div>
+                         <div class="form-group">
+                            <div class="col-sm-10">
+                            	<label for="password" class="font-weight-bold text-info">Password</label>
+                                <input class="form-control form-control-sm" th:field="*{password}" type="password"  placeholder="Enter your password"></input>
+                                 <span class="error text-danger" th:errors="*{password}"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary btn-sm btn-block ">Register</button>
+                                <span class="font-weight-bold" style="color: white;" th:text = "${message}"></span>
+                            </div>
+                        </div>
+                    </form>
+	</main>
+	</div>
+	<div class="row" style="height:10%">
+	<footer class="col"  data-include="footerportion"></footer>
+	</div>
+  </div>
+</body>
+</html>

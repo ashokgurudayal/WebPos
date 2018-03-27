@@ -16,6 +16,7 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	</head>
+	
 <body>
 
   <div class="container-fluid h-100" ng-app="myapp" ng-controller="orderscontroller">
@@ -25,45 +26,77 @@
    <div class="row" style="height:80%">
 	<aside  class="col-sm-2" data-include="leftsidebar"></aside>
 	<main   class="col-sm-10">
-	Select the date
-	<input type="text" id="datepicker"></input><br></br><br></br>
-	<div class="card" ng-repeat-start="order in orderdetails track by $index">
-		<div class="card-header">
-			<label for="#orderno">Order No:</label>
-			<span id="orderno" ng-bind="$index+1"></span><br/>
-			<label for="#createdtime">Created Time:</label>
-			<span id="createdtime" ng-bind="order.createts"></span>
+		<span class="text-info">Select the order in which to display the orders</span><br></br>
+		<input type="radio"  ng-model="daymodel" id="day" name="ordersbydate" ></input>
+		<label for="day" class="mr-2">Day</label>
+		<input type="radio" ng-click="testfunction()" id="month" name="ordersbydate" ></input>
+		<label for="month" class="mr-2">Month</label>
+		<input type="radio" id="year"  name="ordersbydate" ></input>
+		<label for="year" class="mr-2">Year</label>
+		<input type="radio" id="daterange"  name="ordersbydate" ></input>
+		<label for="daterange" class="mr-2">Date Range</label>
+		<br></br>
+		<div id="daydiv" style="display: none;">
+			Select the date
+			<input type="text" id="datepicker" ></input><br></br><br></br>
 		</div>
-		<div class="card-body">
-			<div class="table-responsive">
-			<table class="table">
-				<tr>
-					<th>Sl.No</th>
-					<th>Product</th>
-					<th>Units</th>
-					<th>Weight</th>
-					<th>Cost Price</th>
-					<th>Tax</th>
-				</tr>
-				<tr ng-repeat="orderitem in order.orderItems">
-					<td ng-bind="$index+1"></td>
-					<td ng-bind="orderitem.inventory.product.name"></td>
-					<td ng-bind="orderitem.units"></td>
-					<td ng-bind="orderitem.weight"></td>
-					<td ng-bind="orderitem.costPrice"></td>
-					<td ng-bind="orderitem.taxValue"></td>
-				</tr>
-			</table>
+		<div id="daterangediv" style="display: none;">
+			<label>Start Date</label>
+			<input type="text" id="startdatepicker" ></input>
+			<label>End Date</label>
+			<input type="text" id="enddatepicker" ></input>
+			<br></br><br></br>
+		</div>
+		<div id="monthdiv" style="display: none;">
+			<select id="monthselecttag" ng-model="myselection" ng-options="x for x in monthNames">
+				<option disabled="disabled" label="select a value"></option>
+			</select>
+		</div>
+		<span ng-show="orderdetails.length==0" class="text-primary">No Orders to display</span>
+		<a href="#" ng-show="orderdetails.length!==0" id="exportButton" class="btn btn-sm btn-info">Export to Excel <span class="glyphicon glyphicon-export"></span></a><br></br>
+		<label for="totalCP" ng-show="orderdetails.length!==0" class="text-info">TOTAL CP</label>
+		<span class="font-weight-bold text-info" ng-show="orderdetails.length!==0" id="totalCP" ng-if="orderdetails!==undefined" ng-bind="totalCP"></span>
+		<label for="totalTax" ng-show="orderdetails.length!==0" class="text-info">TOTAL Tax</label>
+		<span class="font-weight-bold text-info" ng-show="orderdetails.length!==0" id="totalTax"  ng-if="orderdetails!==undefined" ng-bind="totalTax"></span>
+		<label for="totalNetAmount" ng-show="orderdetails.length!==0" class="text-info">TOTAL Net Amount</label>
+		<span class="font-weight-bold text-info" ng-show="orderdetails.length!==0" id="totalNetAmount" ng-if="orderdetails!==undefined" ng-bind="totalCP-totalTax"></span>
+		<div class="card" ng-show="orderdetails.length!==0" ng-repeat-start="order in orderdetails track by $index">
+			<div class="card-header">
+				<label for="#orderno">Order No:</label>
+				<span id="orderno" ng-bind="$index+1"></span><br/>
+				<label for="#createdtime">Created Time:</label>
+				<span id="createdtime" ng-bind="order.createts"></span>
 			</div>
-			
-		</div>
-		<div class="card-footer">
-			<label for="totalcostprice">Total Cost Price:</label>
-			<span id="totalcostprice" ng-bind="order.total_amount"></span><br/>
-			<label for="totaltax">Total Tax:</label>
-			<span id="totaltax" ng-bind="order.total_tax"></span>
-		</div>
-	</div><br><br ng-repeat-end="ng-repeat-end" /></br>
+			<div class="card-body">
+				<div class="table-responsive">
+				<table class="table">
+					<tr>
+						<th>Sl.No</th>
+						<th>Product</th>
+						<th>Units</th>
+						<th>Weight</th>
+						<th>Cost Price</th>
+						<th>Tax</th>
+					</tr>
+					<tr ng-repeat="orderitem in order.orderItems">
+						<td ng-bind="$index+1"></td>
+						<td ng-bind="orderitem.inventory.product.name"></td>
+						<td ng-bind="orderitem.units"></td>
+						<td ng-bind="orderitem.weight"></td>
+						<td ng-bind="orderitem.costPrice"></td>
+						<td ng-bind="orderitem.taxValue"></td>
+					</tr>
+				</table>
+				</div>
+				
+			</div>
+			<div class="card-footer">
+				<label for="totalcostprice">Total Cost Price:</label>
+				<span id="totalcostprice" ng-bind="order.total_amount"></span><br/>
+				<label for="totaltax">Total Tax:</label>
+				<span id="totaltax" ng-bind="order.total_tax"></span>
+			</div>
+		</div><br><br ng-repeat-end="ng-repeat-end" /></br>
 
 	</main>
 	</div>
@@ -72,17 +105,207 @@
 	</div>
   </div>
   <script>
+//<![CDATA[
   		var app = angular.module('myapp',[]);
   		app.controller('orderscontroller',function($scope,$http){
-  			$http.get('getallorders').then(function(response){
-  				$scope.orderdetails = response.data;
-  			});
+  			$scope.monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  			$('#day').trigger("click");
+  			
+  			//function to calculate the sum of all amounts
+  			$scope.totalOfOrderDetails = function(){
+  				var tcp = 0;
+  				var tt = 0;
+  				for(var i=0;i<$scope.orderdetails.length;i++){
+  					tcp = tcp+$scope.orderdetails[i].total_amount;
+  					tt = tt+$scope.orderdetails[i].total_tax;
+  				}
+  				console.log("tcp"+tcp);
+  				$scope.totalCP = tcp;
+  				$scope.totalTax = tt;
+  			}
+  			
   		});
-  		$( function() {
-  		    
+  		$('#day').click(function() {
+  			$('#daterangediv').hide();
+  			$('#monthdiv').hide();
   		  	$('#datepicker').datepicker();
   			$('#datepicker').datepicker('setDate', 'today');
+  			$('#daydiv').slideDown();
+  			fire_ajax_submit_dateafter();
   		});
+  		$('#month').click(function() {
+  			$('#daydiv').hide();
+  			$('#daterangediv').hide();
+  			$('#monthdiv').slideDown();
+  			
+  			var scope = angular.element(document.querySelector('[ng-controller="orderscontroller"]')).scope();
+            scope.$apply(function(){
+                scope.orderdetails = [];
+                console.log($('#monthselecttag').val())
+      			if($('#monthselecttag').val()!=null)
+    	        	fire_ajax_submit_datemonth();
+            });
+   		});
+  		$('#daterange').click(function() {
+  			$('#daydiv').hide();
+  			$('#monthdiv').hide();
+  			$('#daterangediv').slideDown();
+  			$('#startdatepicker').datepicker();
+  			$('#startdatepicker').datepicker('setDate', 'today');
+  			$('#enddatepicker').datepicker();
+  			$('#enddatepicker').datepicker('setDate', '1');
+  			fire_ajax_submit_datebetween();
+  		});
+  		$('#datepicker').change(function(){
+  			event.preventDefault();
+	        fire_ajax_submit_dateafter();
+	       
+  		});
+  		$('#startdatepicker').change(function(){
+  			event.preventDefault();
+	        fire_ajax_submit_datebetween();
+	       
+  		});
+  		$('#enddatepicker').change(function(){
+  			event.preventDefault();
+	        fire_ajax_submit_datebetween();
+	       
+  		});
+  		
+  		$('#monthselecttag').change(function(){
+  			console.log('#monthselecttag change');
+  			fire_ajax_submit_datemonth();
+  		});
+  		$('#exportButton').click(function(){
+  			event.preventDefault();
+  			var scope = angular.element(document.querySelector('[ng-controller="orderscontroller"]')).scope();
+  			var d = {orderdetails:(JSON.stringify(scope.orderdetails))};
+  			$.ajax({
+			    url : "createtheexcelfile",
+			    type : "get",
+			    async: false,
+			    success : function(data, status){
+			    	window.location.href = "http://localhost:8090/download";
+		        }
+			    });
+  			
+  		});
+  		function fire_ajax_submit_datemonth() {
+
+		 	val = {month:$('#monthselecttag').val()};
+
+		    $.ajax({
+		        type: "POST",
+		        url: "/getallordersmonth",
+		        data: val,
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var scope = angular.element(document.querySelector('[ng-controller="orderscontroller"]')).scope();
+		            scope.$apply(function(){
+		                scope.orderdetails = data;
+		                scope.totalOfOrderDetails();
+		            });
+		           
+		        	/*
+		            var json = "<h4>Ajax Response</h4><pre>"
+		                + JSON.stringify(data, null, 4) + "</pre>";
+		            $('#feedback').html(json);
+		            */
+		            
+
+		        },
+		        error: function (e) {
+		        	/*
+		            var json = "<h4>Ajax Response</h4><pre>"
+		                + e.responseText + "</pre>";
+		            $('#feedback').html(json);
+					*/
+		            console.log("ERROR : ", e);
+		            
+
+		        }
+		    });
+
+		}
+  		function fire_ajax_submit_datebetween() {
+
+		 	val = {datestart:$('#startdatepicker').val(),dateend:$('#enddatepicker').val()};
+
+		    $.ajax({
+		        type: "POST",
+		        url: "/getallordersbetween",
+		        data: val,
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var scope = angular.element(document.querySelector('[ng-controller="orderscontroller"]')).scope();
+		            scope.$apply(function(){
+		                scope.orderdetails = data;
+		                scope.totalOfOrderDetails();
+		            });
+		           
+		        	/*
+		            var json = "<h4>Ajax Response</h4><pre>"
+		                + JSON.stringify(data, null, 4) + "</pre>";
+		            $('#feedback').html(json);
+		            */
+		            
+
+		        },
+		        error: function (e) {
+		        	/*
+		            var json = "<h4>Ajax Response</h4><pre>"
+		                + e.responseText + "</pre>";
+		            $('#feedback').html(json);
+					*/
+		            console.log("ERROR : ", e);
+		            
+
+		        }
+		    });
+
+		}
+  		
+  		function fire_ajax_submit_dateafter() {
+
+		 	val = {d:$('#datepicker').val()};
+
+		    $.ajax({
+		        type: "POST",
+		        url: "/getallordersafter",
+		        data: val,
+		        cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		        	var scope = angular.element(document.querySelector('[ng-controller="orderscontroller"]')).scope();
+		            scope.$apply(function(){
+		                scope.orderdetails = data;
+		                scope.totalOfOrderDetails();
+		            });
+		           
+		        	/*
+		            var json = "<h4>Ajax Response</h4><pre>"
+		                + JSON.stringify(data, null, 4) + "</pre>";
+		            $('#feedback').html(json);
+		            */
+		            
+
+		        },
+		        error: function (e) {
+		        	/*
+		            var json = "<h4>Ajax Response</h4><pre>"
+		                + e.responseText + "</pre>";
+		            $('#feedback').html(json);
+					*/
+		            console.log("ERROR : ", e);
+		            
+
+		        }
+		    });
+
+		}
+  	// ]]>
   </script>
 </body>
 </html>

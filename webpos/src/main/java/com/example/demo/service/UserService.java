@@ -40,6 +40,13 @@ public class UserService {
 		user.setRoles(userRoles);
 		userRepository.save(user);
 	}
+	public void addEmployeeUser(PosUser user) {
+		// TODO Auto-generated method stub
+		Set<Role> userRoles = new HashSet<Role>();
+		userRoles.add(roleRepository.findOne(2));
+		user.setRoles(userRoles);
+		userRepository.save(user);
+	}
 	public void updateUser(PosUser user, String id) {
 		// TODO Auto-generated method stub
 		userRepository.save(user);
@@ -53,5 +60,8 @@ public class UserService {
 	}
 	public Company findCompanyOfUser(String userName) {
 		return userRepository.findCompanyOfUser(userName);
+	}
+	public List<PosUser> findAllUsersOfCompany(Company company){
+		return userRepository.findAllUsersOfCompany(company);
 	}
 }

@@ -6,6 +6,7 @@ header{
 }
 aside{
 	background: url("sidenavigation.jpeg");
+	overflow:auto;
 }
 main{
 	background-color: white;
